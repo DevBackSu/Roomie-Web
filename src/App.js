@@ -2,6 +2,7 @@
 import "./App.css";
 import React from "react";
 import { useEffect, useState } from "react";
+import {TestComponent, IsTypeComponent} from "./reactTest/testComponent"
 import axios from "axios";
 import logo from "./logo.svg";
 
@@ -73,11 +74,22 @@ function App() {
         <button onClick={tileSort}>정렬하기</button>
       </div>
 
+      <hr/>
+      <h3>props 예시</h3>
+      <TestComponent propValue="test Props">안녕 프롭스</TestComponent>
+      <hr/>
+
+      <hr/>
+      <h3>props 예시 2</h3>
+      <IsTypeComponent name = "호호호" age={"dkssud"} isChecked={false}>안녕 프롭스</IsTypeComponent>
+      <hr/>
+
       <button onClick={decrease}>이전 음식</button>
       <div>
         {food[currentIndex]}
       </div>
       <button onClick={increase}>다음 음식</button>
+      <p>음식 리스트 : {food}</p>
 
       <CheckComponent></CheckComponent>
 
