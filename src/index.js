@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+root.render( //App.js를 렌더링 -> 사용자 정의 태그가 모여있는 파일인 App.js가 호출되어 실행됨
   <React.StrictMode>
     <App />
   </React.StrictMode>

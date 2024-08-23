@@ -3,11 +3,12 @@ import "./App.css";
 import React from "react";
 import { useEffect, useState } from "react";
 import {TestComponent, IsTypeComponent} from "./reactTest/testComponent"
+import Subject from "./reactTest/Subject"
 import axios from "axios";
 import logo from "./logo.svg";
 
 function App() {
-  const [data, setData] = useState("");
+  const [data, setData] = useState(""); //함수로 선언되어 있기 때문에 useState로 state를 사용함
   let [content, text] = useState(['0번째', '1번째', '2번째']);
   let [heart, changeHeart] = useState(0); //초기값 = 0
   const [food, setFood] = useState(['감자탕', '햄버거', '삼겹살', '미역국', '카레', '자바칩 프라푸치노', '달걀장조림']);
@@ -31,10 +32,10 @@ function App() {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { //SERVER 접근
     axios
       .get("/api/data")
-      .then((res) => setData(res.data)) //호출로 반환받은 값인 data를 setData로 setting
+      .then((res) => setData(res.data)) //호출로 반환받은 값인 data를 setData로 req에 setting
       .catch((err) => console.log(err));
   }, []);
 
@@ -59,7 +60,7 @@ function App() {
       <div className="black-nav">
         <div>여기는 일단 헤더임</div>
       </div>
-      <div>data : {data}</div>
+      <div>서버에서 반환되는 data : {data}</div>
       <div className="list">
         <h4>{content[0]} <span onClick={()=>{changeHeart(heart+1)}}>❤</span> {heart} </h4>
         <p>작성자 : holly</p>
@@ -81,7 +82,7 @@ function App() {
 
       <hr/>
       <h3>props 예시 2</h3>
-      <IsTypeComponent name = "호호호" age={"dkssud"} isChecked={false}>안녕 프롭스</IsTypeComponent>
+      <IsTypeComponent name = "호호호" age={"안녕"} isChecked={false}>안녕 프롭스</IsTypeComponent>
       <hr/>
 
       <button onClick={decrease}>이전 음식</button>
@@ -92,6 +93,9 @@ function App() {
       <p>음식 리스트 : {food}</p>
 
       <CheckComponent></CheckComponent>
+
+      <Subject title = "naver" sub = "Click Me"></Subject>
+      <p>Subject로 넘기는 title과 sub이 props가 된다.</p>
 
       <img style = {{weight : '100px', height : '100px'}} src={logo}/>
       <p>제목 = 총 {content.length} 개</p>

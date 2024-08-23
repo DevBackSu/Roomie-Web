@@ -18,7 +18,7 @@ function TestComponent(props){
     }
 }
 
-TestComponent.prototype = {
+TestComponent.prototype = { //TestComponent가 받는 매개변수의 타입을 지정
     propValue : PropType.string,
     children : PropType.string
 }
