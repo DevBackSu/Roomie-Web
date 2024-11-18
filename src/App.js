@@ -34,7 +34,7 @@ function App() {
 
   useEffect(() => { //SERVER 접근
     axios
-      .get("/api/data")
+      .get("http://localhost:3001/", {withCredentials: true})  // 토큰이 포함된 요청을 브라우저가 허용하도록 함
       .then((res) => setData(res.data)) //호출로 반환받은 값인 data를 setData로 req에 setting
       .catch((err) => console.log(err));
   }, []);
@@ -55,8 +55,14 @@ function App() {
     text(newSort);
   }
 
+  function handleLogin() {
+    window.location.href='http://localhost:3001/oauth2/authorization/google';
+  }
+
   return (
     <div className = "App">
+
+    <button onClick={handleLogin}>Login button</button>
       <div className="black-nav">
         <div>여기는 일단 헤더임</div>
       </div>

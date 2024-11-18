@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react';  // react 라이브러리 기본값. JSX 문법 사용을 위해 필수
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
