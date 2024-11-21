@@ -32,13 +32,6 @@ function App() {
     }
   }
 
-  useEffect(() => { //SERVER 접근
-    axios
-      .get("http://localhost:3001/", {withCredentials: true})  // 토큰이 포함된 요청을 브라우저가 허용하도록 함
-      .then((res) => setData(res.data)) //호출로 반환받은 값인 data를 setData로 req에 setting
-      .catch((err) => console.log(err));
-  }, []);
-
   function titleChange(){
     text(['변경된 0번째', '변경된 1번째', '변경된 2번째']);
   }
@@ -66,7 +59,6 @@ function App() {
       <div className="black-nav">
         <div>여기는 일단 헤더임</div>
       </div>
-      <div>서버에서 반환되는 data : {data}</div>
       <div className="list">
         <h4>{content[0]} <span onClick={()=>{changeHeart(heart+1)}}>❤</span> {heart} </h4>
         <p>작성자 : holly</p>
