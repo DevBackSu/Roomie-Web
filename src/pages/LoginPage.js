@@ -9,7 +9,7 @@ function LoginPage() {
         const { tokenId } = response;
 
         try {
-            const result = await axios.post('http://localhost:3001/api/auth/google', {
+            const result = await axios.post('http://localhost:3001/oauth2/authorization/google', {
                 tokenId,
             });
 
