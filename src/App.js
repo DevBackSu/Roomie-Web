@@ -16,13 +16,15 @@ function App() {
                 {/* 인증이 필요한 페이지는 ProtectedRoute로 보호 */}
                 <Route
                     path="/info"
-                    element={<ProtectedRoute>
-                        <InfoPage />
-                    </ProtectedRoute>}
+                    element={
+                        <ProtectedRoute>
+                            <InfoPage />
+                        </ProtectedRoute>
+                    }
                 />
 
-                {/* 인증이 필요한 페이지들 추가 가능 */}
-                <Route path="*" element={<Navigate to="/" />} /> {/* 잘못된 URL은 메인 페이지로 리다이렉트 */}
+                {/* 잘못된 URL은 메인 페이지로 리다이렉트 */}
+                <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </Router>
     );

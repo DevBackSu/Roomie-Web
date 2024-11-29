@@ -1,26 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { saveTokens } from "../utils/auth";
 
 function LoginPage() {
-    const handleLogin = async () => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/oauth2/authorization/google`, {
-                method: "GET",
-                credentials: "include", // 쿠키 기반 인증을 위해 설정
-            });
-    
-            if (response.ok) {
-                const accessToken = response.headers.get("Auth");
-                const refreshToken = response.headers.get("Refresh");
-                saveTokens(accessToken, refreshToken);
-                window.location.href = "/";
-            } else {
-                console.error("Login failed:", response.status, response.statusText);
-                alert("Login failed.");
-            }
-        } catch (error) {
-            console.error("Error during login:", error);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // 리디렉트된 URL에서 토큰 정보 추출
+        const params = new URLSearchParams(window.location.search);
+        const accessToken = params.get("accessToken");
+        const refreshToken = params.get("refreshToken");
+
+        if (accessToken && refreshToken) {
+            saveTokens(accessToken, refreshToken); // 로컬 스토리지에 토큰 저장
+            navigate("/"); // 메인 페이지로 리디렉트
         }
+    }, [navigate]);
+
+    const handleLogin = () => {
+        // 구글 OAuth 로그인 요청 (서버가 리디렉트 처리)
+        window.location.href = `${process.env.REACT_APP_API_URL}/oauth2/authorization/google`;
     };
 
     return (

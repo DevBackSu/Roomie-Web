@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { saveTokens } from "../utils/auth";
 
 function InfoPage() {
     const [formData, setFormData] = useState({
@@ -6,6 +8,16 @@ function InfoPage() {
         email: "",
         additionalInfo: "",
     });
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (!accessToken || !refreshToken) {
+            navigate("/login"); // 토큰 없으면 로그인 페이지로 리디렉션
+        }
+    }, [navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,7 +40,7 @@ function InfoPage() {
 
             if (response.ok) {
                 alert("Info submitted successfully!");
-                window.location.href = "/";
+                window.location.href = "/"; // 성공 후 메인 페이지로 리디렉트
             } else {
                 alert("Failed to submit info.");
             }
