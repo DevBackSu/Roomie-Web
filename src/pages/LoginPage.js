@@ -6,19 +6,29 @@ function LoginPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // 리디렉트된 URL에서 토큰 정보 추출
+        // URL에서 토큰 추출
         const params = new URLSearchParams(window.location.search);
-        const accessToken = params.get("accessToken");
-        const refreshToken = params.get("refreshToken");
+        const accessToken = params.get("accessHeader");
+        const refreshToken = params.get("refreshHeader");
 
-        if (accessToken && refreshToken) {
-            saveTokens(accessToken, refreshToken); // 로컬 스토리지에 토큰 저장
-            navigate("/"); // 메인 페이지로 리디렉트
+        console.log("Access Token:", accessToken);
+        console.log("Refresh Token:", refreshToken);
+
+        if (accessToken) {
+            saveTokens(accessToken, refreshToken); // 로컬 스토리지에 저장
+
+            if (!refreshToken) {
+                // Refresh Token이 없으면 회원가입 페이지로 이동
+                navigate("/info");
+            } else {
+                // 두 토큰 모두 존재하면 메인 페이지로 이동
+                navigate("/");
+            }
         }
     }, [navigate]);
 
     const handleLogin = () => {
-        // 구글 OAuth 로그인 요청 (서버가 리디렉트 처리)
+        // OAuth2 로그인 요청
         window.location.href = `${process.env.REACT_APP_API_URL}/oauth2/authorization/google`;
     };
 
