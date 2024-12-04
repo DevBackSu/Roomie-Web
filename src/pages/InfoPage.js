@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { saveTokens } from "../utils/auth";
+// import { saveTokens } from "../utils/auth";
 
 function InfoPage() {
     const [formData, setFormData] = useState({
