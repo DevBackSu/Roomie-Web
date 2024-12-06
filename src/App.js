@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import InfoPage from "./pages/InfoPage";
@@ -9,7 +9,7 @@ import ErrorPage from "./pages/ErrorPage";
 
 function App() {
     return (
-        <Router>
+        <BrowserRouter>
             <Routes>
                 {/* 메인 페이지와 로그인 페이지는 토큰 인증이 없어도 접근 가능 */}
                 <Route path="/" element={<MainPage />} />
@@ -30,7 +30,7 @@ function App() {
                 {/* 잘못된 URL은 메인 페이지로 리다이렉트 */}
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-        </Router>
+        </BrowserRouter>
     );
 }
 
