@@ -6,9 +6,8 @@ export const saveTokens = (accessToken, refreshToken) => {
 };
 
 export const logout = () => {
-    localStorage.clear();
-    Cookies.remove("refreshToken");
-    window.alert("로그인을 다시 해주세요");
+    localStorage.removeItem("accessToken");
+    document.cookie = "refreshToken=; Max-Age=0"; // Refresh Token 삭제
     window.location.href = "/";
 };
 
