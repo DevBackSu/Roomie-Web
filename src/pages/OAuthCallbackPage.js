@@ -6,44 +6,30 @@ function OAuthCallbackPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const handleOAuthLogin = () => {
-            try {
-                const queryString = window.location.search;
-                console.log("Window Location:", window.location.href);
-                console.log("Raw Query String:", queryString);
+        const handleOAuthCallback = () => {
+            const urlParams = new URLSearchParams(window.location.search);
 
-                const urlParams = new URLSearchParams(queryString);
-                const accessToken = urlParams.get("accessToken");
-                const refreshToken = urlParams.get("refreshToken");
+            console.log("url : " + urlParams);
 
-                console.log("Parsed accessToken:", accessToken);
-                console.log("Parsed refreshToken:", refreshToken);
+            const accessToken = urlParams.get("accessToken");
+            const refreshToken = urlParams.get("refreshToken");
 
-                if (accessToken) {
-                    saveTokens(accessToken, refreshToken);
-                    console.log("Tokens saved successfully");
+            console.log("access token : " + accessToken);
+            console.log("refresh token : " + refreshToken);
 
-                    if (!refreshToken) {
-                        console.log("Refresh token not provided, navigating to InfoPage");
-                        navigate(`/info?accessToken=${accessToken}`, { replace: true });
-                    } else {
-                        console.log("Navigating to MainPage");
-                        navigate("/", { replace: true });
-                    }
-                } else {
-                    console.error("Failed to log in. No access token found.");
-                    navigate("/error", { replace: true });
-                }
-            } catch (error) {
-                console.error("Error during OAuth login:", error);
-                navigate("/error", { replace: true });
+            saveTokens(accessToken, refreshToken);
+
+            if (!refreshToken) {
+                navigate("/info", { replace: true }); // 회원가입 페이지로 이동
+            } else {
+                navigate("/main", { replace: true }); // 메인 페이지로 이동
             }
         };
 
-        handleOAuthLogin();
+        handleOAuthCallback();
     }, [navigate]);
 
-    return <div>Processing your login...</div>;
+    return <div>Processing login...</div>;
 }
 
 export default OAuthCallbackPage;
