@@ -17,7 +17,11 @@ const InfoPage = () => {
         e.preventDefault();
         try {
             const token = getAccessToken();
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/userinfo`, {
+
+            console.log("info token : " + token);
+            console.log("url : " + `${process.env.REACT_APP_API_URL}/api/user/info`);
+
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
