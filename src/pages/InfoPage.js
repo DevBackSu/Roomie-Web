@@ -1,69 +1,98 @@
-import React, { useState } from "react";
-import { getAccessToken, logout } from "../utils/auth";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const InfoPage = () => {
+function InfoPage() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: "",
+        nickname: "",
         email: "",
-        phone: "",
+        gender: "",
+        mainAnimal: "",
+        birthDate: "",
+        school: "",
+        local: "",
+        imgUrl: "",
     });
 
-    const handleInputChange = (e) => {
+    const checkRefreshTokenInCookies = () => {
+        const cookies = document.cookie.split("; ");
+        for (const cookie of cookies) {
+            if (cookie.startsWith("refreshToken=")) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    useEffect(() => {
+        if (checkRefreshTokenInCookies()) {
+            console.log("refreshToken exists. Redirecting to /...");
+            navigate("/"); // refreshToken이 있으면 메인 페이지로 이동
+        }
+    }, [navigate]);
+
+    const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const accessToken = localStorage.getItem("accessToken");
+
         try {
-            const token = getAccessToken();
-
-            console.log("info token : " + token);
-            console.log("url : " + `${process.env.REACT_APP_API_URL}/api/user/info`);
-
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${accessToken}`,
                 },
+                credentials: "include", // 쿠키 포함
                 body: JSON.stringify(formData),
             });
-            
-            if (response.status === 401) {
-                // Unauthorized -> 로그아웃 처리
-                logout();
-            } else if (response.ok) {
-                alert("회원가입이 완료되었습니다.");
-                window.location.href = "/main";
+
+            if (response.ok) {
+                alert("정보가 저장되었습니다!");
+                navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
             } else {
-                throw new Error("Failed to submit user info");
+                alert("정보 저장에 실패했습니다. 다시 시도해주세요.");
             }
-        } catch (error) {
-            alert("오류가 발생했습니다. 다시 시도해주세요.");
+        } catch (err) {
+            console.error("Error submitting user info:", err);
+            alert("서버와의 통신에 실패했습니다.");
         }
     };
 
     return (
         <div>
-            <h1>회원가입</h1>
+            <h1>정보 입력</h1>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>이름</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
+                    <label htmlFor="nickname">이름:</label>
+                    <input
+                        type="text"
+                        id="nickname"
+                        name="nickname"
+                        value={formData.nickname}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
                 <div>
-                    <label>이메일</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} required />
+                    <label htmlFor="email">이메일:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
-                <div>
-                    <label>전화번호</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required />
-                </div>
-                <button type="submit">가입 완료</button>
+                <button type="submit">저장</button>
             </form>
         </div>
     );
-};
+}
 
 export default InfoPage;
