@@ -33,7 +33,24 @@ function InfoPage() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // mainAnimal 값을 숫자로 변환
+        if (name === "mainAnimal") {
+            // "부엉이"는 2, "종달새"는 1
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value === "부엉이" ? 2 : value === "종달새" ? 1 : "",
+            }));
+        } else if (name === "imgUrl") {
+            // imgUrl은 숫자로 변환 (이미지 선택 번호)
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value, // 1, 2, 3, 4, 5로 설정
+            }));
+        } else {
+            // 나머지 값은 그대로 설정
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -128,7 +145,7 @@ function InfoPage() {
                             type="radio"
                             name="mainAnimal"
                             value="부엉이"
-                            checked={formData.mainAnimal === "부엉이"}
+                            checked={formData.mainAnimal === 2}
                             onChange={handleChange}
                             required
                         />
@@ -139,7 +156,7 @@ function InfoPage() {
                             type="radio"
                             name="mainAnimal"
                             value="종달새"
-                            checked={formData.mainAnimal === "종달새"}
+                            checked={formData.mainAnimal === 1}
                             onChange={handleChange}
                             required
                         />
