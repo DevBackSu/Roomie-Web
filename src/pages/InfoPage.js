@@ -55,8 +55,14 @@ function InfoPage() {
     };
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault();  // 이벤트가 발동했을 때 페이지가 reload되는 현상을 막아줌
+
     const accessToken = localStorage.getItem("accessToken");
+
+    if(!accessToken) {
+        alert("로그인을 다시 해주세요.");
+        window.location.href = "/";
+    }
 
     try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
@@ -73,9 +79,6 @@ const handleSubmit = async (e) => {
             const token = await response.json(); // 응답 JSON 파싱
             const { accessToken: newAccessToken, refreshToken: newRefreshToken } = token;
 
-            console.log("ok access : " + newAccessToken)
-            console.log("ok refresh : " + newRefreshToken)
-            console.log("이게 뭐지   : " + response.body)
             if (newAccessToken && newRefreshToken) {
                 saveTokens(newAccessToken, newRefreshToken); // saveTokens 함수 호출하여 토큰 저장
             }
@@ -83,7 +86,9 @@ const handleSubmit = async (e) => {
             alert("정보가 저장되었습니다!");
             navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
         } else {
-            alert("정보 저장에 실패했습니다. 다시 시도해주세요.");
+            // const {success: s, message: m} = token;
+            // console.log(m);
+            alert("정보 저장에 실패했습니다. 새로 고침 후 다시 시도해주세요.");
         }
     } catch (err) {
         console.error("Error submitting user info:", err);

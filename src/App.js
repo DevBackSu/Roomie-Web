@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import InfoPage from "./pages/InfoPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage";
+import MyPage from "./pages/MyPage"
 import ErrorPage from "./pages/ErrorPage";
 
 function App() {
@@ -26,6 +27,11 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route path="/mypage" element = {
+                    <ProtectedRoute>
+                        <MyPage />
+                    </ProtectedRoute>
+                } />
 
                 {/* 잘못된 URL은 메인 페이지로 리다이렉트 */}
                 <Route path="*" element={<Navigate to="/" />} />
