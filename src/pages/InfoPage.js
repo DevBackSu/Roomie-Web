@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { saveTokens } from "../utils/auth";
 
 function InfoPage() {
     const navigate = useNavigate();
@@ -53,32 +54,42 @@ function InfoPage() {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const accessToken = localStorage.getItem("accessToken");
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    const accessToken = localStorage.getItem("accessToken");
 
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                credentials: "include", // 쿠키 포함
-                body: JSON.stringify(formData),
-            });
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+            credentials: "include", // 쿠키 포함
+            body: JSON.stringify(formData),
+        });
 
-            if (response.ok) {
-                alert("정보가 저장되었습니다!");
-                navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
-            } else {
-                alert("정보 저장에 실패했습니다. 다시 시도해주세요.");
+        if (response.ok) {
+            const token = await response.json(); // 응답 JSON 파싱
+            const { accessToken: newAccessToken, refreshToken: newRefreshToken } = token;
+
+            console.log("ok access : " + newAccessToken)
+            console.log("ok refresh : " + newRefreshToken)
+            console.log("이게 뭐지   : " + response.body)
+            if (newAccessToken && newRefreshToken) {
+                saveTokens(newAccessToken, newRefreshToken); // saveTokens 함수 호출하여 토큰 저장
             }
-        } catch (err) {
-            console.error("Error submitting user info:", err);
-            alert("서버와의 통신에 실패했습니다.");
+
+            alert("정보가 저장되었습니다!");
+            navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
+        } else {
+            alert("정보 저장에 실패했습니다. 다시 시도해주세요.");
         }
-    };
+    } catch (err) {
+        console.error("Error submitting user info:", err);
+        alert("서버와의 통신에 실패했습니다.");
+    }
+};
 
     return (
         <div>
