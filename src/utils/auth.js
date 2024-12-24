@@ -20,11 +20,11 @@ export const saveTokens = (accessToken, refreshToken) => {
 export const logout = () => {
     const at = getAccessToken();
     if(at) {
-        const isLoginout = window.confirm("로그아웃을 하시겠습니까?");
+        const isLogout = window.confirm("로그아웃을 하시겠습니까?");
 
-        if(isLoginout) {
+        if(isLogout) {
             localStorage.removeItem("accessToken");
-            cookie.remove("refreshToken");
+            cookie.remove("refreshToken", {path : '/'});
             alert("로그인을 다시 해주세요.");
             window.location.href = "/";
         }

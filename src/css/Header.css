@@ -1,0 +1,51 @@
+/* 기본 레이아웃 */
+.header {
+    width: auto;
+    padding: 10px 20px 10px 20px;
+    background-color: #f4f4f4; /* 배경색 */
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home-link {
+    font-size: 18px;
+    text-decoration: none;
+    color: #333;
+    margin-right: auto;  /* Home 링크를 좌측 끝에 배치 */
+}
+
+.auth-links {
+    display: flex;
+    align-items: center;
+}
+
+.user-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;  /* MyPage와 Logout 사이에 간격을 추가 */
+}
+
+.auth-link {
+    font-size: 16px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.auth-link:hover {
+    color: #0056b3;
+}
+
+button.auth-link {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+}
+
+button.auth-link:hover {
+    color: #0056b3;
+}
