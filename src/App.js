@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage";
 import MyPage from "./pages/MyPage"
 import ErrorPage from "./pages/ErrorPage";
+import MyPageUpdate from "./pages/MyPageUpdate";
 
 function App() {
     return (
@@ -30,6 +31,11 @@ function App() {
                 <Route path="/mypage" element = {
                     <ProtectedRoute>
                         <MyPage />
+                    </ProtectedRoute>
+                } />
+                <Route path="/mypageUpdate" element = {
+                    <ProtectedRoute>
+                        <MyPageUpdate />
                     </ProtectedRoute>
                 } />
 

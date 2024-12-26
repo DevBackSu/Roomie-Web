@@ -18,7 +18,7 @@ function MyPage() {
             }
 
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/mypage`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/mypage/`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -57,35 +57,8 @@ function MyPage() {
         return `${year}년 ${monthNames[parseInt(month, 10) - 1]}`;
     };
 
-    const handleEdit = async () => {
-        const accessToken = localStorage.getItem("accessToken");
-
-        if (!accessToken) {
-            alert("로그인이 필요합니다.");
-            navigate("/login");
-            return;
-        }
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
-                method: "GET", // 또는 필요에 따라 "POST" 또는 다른 메서드
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error("정보를 수정하는 데 실패했습니다.");
-            }
-
-            const data = await response.json();
-            // 필요한 경우 데이터를 처리하거나 수정 페이지로 이동
-            alert("수정 페이지로 이동합니다.");
-            navigate("/user/edit", { state: { userData: data } });
-        } catch (err) {
-            alert(err.message);
-        }
+    const handleEditClick = () => {
+        navigate("/mypageUpdate", { state: { userData } }); // userData를 state로 전달
     };
 
     if (loading) {
@@ -113,7 +86,7 @@ function MyPage() {
             <p>소셜 타입: {userData.socialType}</p>
             <p>역할: {userData.role}</p>
             {userData.imgUrl && <img src={userData.imgUrl} alt="프로필" />}
-            <button onClick={handleEdit} style={{ marginTop: "20px" }}>
+            <button onClick={handleEditClick} style={{ marginTop: "20px" }}>
                 수정하기
             </button>
         </div>

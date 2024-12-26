@@ -15,6 +15,7 @@ function InfoPage() {
         imgUrl: "",
     });
 
+    // refresh token 여부 확인
     const checkRefreshTokenInCookies = () => {
         const cookies = document.cookie.split("; ");
         for (const cookie of cookies) {
@@ -79,10 +80,7 @@ const handleSubmit = async (e) => {
             const token = await response.json(); // 응답 JSON 파싱
             const { accessToken: newAccessToken, refreshToken: newRefreshToken } = token;
 
-            if (newAccessToken && newRefreshToken) {
-                saveTokens(newAccessToken, newRefreshToken); // saveTokens 함수 호출하여 토큰 저장
-            }
-
+            saveTokens(newAccessToken, newRefreshToken); // saveTokens 함수 호출하여 토큰 저장
             alert("정보가 저장되었습니다!");
             navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
         } else {
