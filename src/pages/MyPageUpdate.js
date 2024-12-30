@@ -113,7 +113,7 @@ function MypageUpdate() {
                     <input
                         type="radio"
                         name="mainAnimal"
-                        value="부엉이"
+                        value="올빼미"
                         checked={formData.mainAnimal === 2}
                         onChange={handleChange}
                     />
