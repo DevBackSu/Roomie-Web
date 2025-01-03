@@ -55,44 +55,44 @@ function InfoPage() {
         }
     };
 
-const handleSubmit = async (e) => {
-    e.preventDefault();  // 이벤트가 발동했을 때 페이지가 reload되는 현상을 막아줌
-
-    const accessToken = localStorage.getItem("accessToken");
-
-    if(!accessToken) {
-        alert("로그인을 다시 해주세요.");
-        window.location.href = "/";
-    }
-
-    try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-            credentials: "include", // 쿠키 포함
-            body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-            const token = await response.json(); // 응답 JSON 파싱
-            const { accessToken: newAccessToken, refreshToken: newRefreshToken } = token;
-
-            saveTokens(newAccessToken, newRefreshToken); // saveTokens 함수 호출하여 토큰 저장
-            alert("정보가 저장되었습니다!");
-            navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
-        } else {
-            // const {success: s, message: m} = token;
-            // console.log(m);
-            alert("정보 저장에 실패했습니다. 새로 고침 후 다시 시도해주세요.");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        const accessToken = localStorage.getItem("accessToken");
+    
+        if (!accessToken) {
+            alert("로그인을 다시 해주세요.");
+            window.location.href = "/";
+            return;
         }
-    } catch (err) {
-        console.error("Error submitting user info:", err);
-        alert("서버와의 통신에 실패했습니다.");
-    }
-};
+    
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/info`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                credentials: "include", // 쿠키 포함 설정
+                body: JSON.stringify(formData),
+            });
+    
+            if (response.ok) {
+                const token = await response.json();
+                const { accessToken: newAccessToken } = token;
+    
+                saveTokens(newAccessToken); // accessToken 저장
+                alert("정보가 저장되었습니다!");
+                navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
+            } else {
+                alert("정보 저장에 실패했습니다. 새로 고침 후 다시 시도해주세요.");
+            }
+        } catch (err) {
+            console.error("Error submitting user info:", err);
+            alert("서버와의 통신에 실패했습니다.");
+        }
+    };
+    
 
     return (
         <div>

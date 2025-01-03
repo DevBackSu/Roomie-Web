@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { saveTokens } from "../utils/auth"; // auth.js에서 가져옴
+import { saveTokens, getRefreshToken } from "../utils/auth"; // auth.js에서 가져옴
 
 function OAuthCallbackPage() {
     const navigate = useNavigate();
@@ -25,10 +25,7 @@ function OAuthCallbackPage() {
             saveTokens(accessToken, null);
 
             // refreshToken이 존재하는지 확인 (Cookie)
-            const refreshToken = document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("refreshToken="))
-                ?.split("=")[1];
+            const refreshToken = getRefreshToken();
 
             console.log(accessToken)
             console.log(refreshToken)
