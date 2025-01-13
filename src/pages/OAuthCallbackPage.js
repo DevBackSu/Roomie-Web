@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { saveTokens, getRefreshToken } from "../utils/auth"; // auth.js에서 가져옴
+import { saveTokens } from "../utils/auth"; // auth.js에서 가져옴
 
 function OAuthCallbackPage() {
     const navigate = useNavigate();
@@ -13,22 +13,19 @@ function OAuthCallbackPage() {
         
         // URL에서 accessToken 파싱
         const urlParams = new URLSearchParams(window.location.search);
-
-        console.log(urlParams)
-
         const accessToken = urlParams.get("accessToken");
 
-        console.log(accessToken)
+        console.log("URL Params:", urlParams);
+        console.log("Access Token:", accessToken);
 
         if (accessToken) {
             // accessToken을 저장
             saveTokens(accessToken, null);
 
-            // refreshToken이 존재하는지 확인 (Cookie)
-            const refreshToken = getRefreshToken();
+            // 리다이렉션된 URL에서 서버에서 받은 헤더 정보 처리
+            const refreshToken = getRefreshTokenFromHeaders();
 
-            console.log(accessToken)
-            console.log(refreshToken)
+            console.log("Refresh Token from Headers:", refreshToken);
 
             if (refreshToken) {
                 console.log("OAuth 인증 성공: refreshToken이 존재합니다. 홈으로 이동합니다.");
@@ -42,8 +39,26 @@ function OAuthCallbackPage() {
             alert("OAuth 인증에 실패했습니다. 다시 로그인 해주세요.");
             navigate("/login");
         }
-
     }, [navigate]);
+
+    /**
+     * 서버 응답에서 refreshToken을 헤더로 받아오는 함수
+     */
+    const getRefreshTokenFromHeaders = () => {
+        // 예시: `refresh` 헤더에서 refreshToken을 추출할 수 없지만,
+        // 서버 응답에서 직접 받은 refreshToken 값을 받아오는 로직을 작성해야 합니다.
+        const cookies = document.cookie.split(';');
+        let refreshToken = null;
+
+        cookies.forEach((cookie) => {
+            const [name, value] = cookie.split('=');
+            if (name.trim() === 'refresh') {
+                refreshToken = value;
+            }
+        });
+
+        return refreshToken;
+    };
 
     return <div>OAuth 인증 처리 중...</div>;
 }
