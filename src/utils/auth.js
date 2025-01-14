@@ -9,7 +9,8 @@ export const saveTokens = (accessToken, refreshToken) => {
             path : '/',
             expires : new Date(Date.now() + 14 * 86400000),
             secure : false,
-            httpOnly : false // js code로의 쿠키에 비정상적 접속을 막음
+            sameSite: None,
+            httpOnly : true // js code로의 쿠키에 비정상적 접속을 막음
         });
     }
     console.log("auth access   " + accessToken)

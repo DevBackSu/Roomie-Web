@@ -61,6 +61,7 @@ function InfoPage() {
         const accessToken = localStorage.getItem("accessToken");
     
         if (!accessToken) {
+            console.log("info page access token 없음")
             alert("로그인을 다시 해주세요.");
             window.location.href = "/";
             return;
