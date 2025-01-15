@@ -46,8 +46,6 @@ function MainPage() {
             <h1>Welcome to the Main Page</h1>
             <Link to="/login">Login</Link>
             <br />
-            <Link to="/info">Go to Info Page (Protected)</Link>
-            <br />
             <button onClick={logout}>Logout</button>
 
             {/* 통계 데이터 표시 */}

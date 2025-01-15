@@ -15,21 +15,19 @@ function InfoPage() {
         imgUrl: "",
     });
 
-    // refresh token 여부 확인
-    const checkRefreshTokenInCookies = () => {
-        const cookies = document.cookie.split("; ");
-        for (const cookie of cookies) {
-            if (cookie.startsWith("refreshToken=")) {
-                return true;
-            }
+    // role이 guest인지지 확인
+    const checkRole = () => {
+        const role = localStorage.getItem("role");
+        if (role === "GUEST") {
+            return true;
         }
         return false;
     };
 
     useEffect(() => {
-        if (checkRefreshTokenInCookies()) {
-            console.log("refreshToken exists. Redirecting to /...");
-            navigate("/"); // refreshToken이 있으면 메인 페이지로 이동
+        if (checkRole()) {
+            console.log("role이 USER입니다. /으로 이동합니다.");
+            navigate("/");
         }
     }, [navigate]);
 
