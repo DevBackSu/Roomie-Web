@@ -1,30 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import { logout } from "../utils/auth";
 
 function MainPage() {
     const [statistics, setStatistics] = useState(null); // 통계 데이터를 저장할 상태
-    const [rank, setRank] = useState(null); // rank 데이터를 저장할 상태
     const [local_rank, setLocalRank] = useState(null); // rank 데이터를 저장할 상태
     const [error, setError] = useState(null); // 오류 상태
 
     // 기본값 설정
-    const defaultStatistics = { value1: 50, value2: 50 };
-    const defaultRank = [
-        "일찍 자요",
-        "늦게 자요",
-        "일찍 일어나요",
-        "늦게 일어나요",
-        "주말마다 집에 가요",
-    ];
-    const defaultLocalRank = [
-        "서울",
-        "제주",
-        "부산",
-        "아산",
-        "대전"
-    ]
+    const defaultStatistics = useMemo(() => ({ value1: 50, value2: 50 }), []);
+    const defaultLocalRank = useMemo(() => ["서울", "제주", "부산", "아산", "대전"], []);
 
     // API 호출 및 데이터 가져오기 함수
     const fetchData = async (url, setter) => {
@@ -45,6 +31,7 @@ function MainPage() {
             }
 
             const data = await response.json();
+            console.log(`Fetched data from ${url}:`, data); // 디버깅용 로그
             setter(data);
         } catch (err) {
             console.error("Error fetching data:", err);
@@ -54,25 +41,36 @@ function MainPage() {
     };
 
     // 초기화 함수
-    const initializeData = () => {
+    const initializeData = useCallback(() => {
         const accessToken = localStorage.getItem("accessToken"); // Access Token 확인
 
         if (!accessToken) {
             console.log("Access Token 없음. 기본값으로 설정.");
             setStatistics(defaultStatistics); // 기본값 설정
-            setRank(defaultRank); // 기본값 설정
-            setLocalRank(defaultLocalRank);
+            setLocalRank(defaultLocalRank); // 기본값 설정
         } else {
             // Access Token이 있을 경우 API 호출
-            fetchData(`${process.env.REACT_APP_API_URL}/api/main/statistics`, setStatistics);
-            fetchData(`${process.env.REACT_APP_API_URL}/api/main/crank`, setRank);
-            fetchData(`${process.env.REACT_APP_API_URL}/api/main/lrank`, setLocalRank);
+            fetchData(`${process.env.REACT_APP_API_URL}/api/main/statistics`, (data) => {
+                if (data) {
+                    setStatistics(data);
+                } else {
+                    setStatistics(defaultStatistics); // 기본값으로 대체
+                }
+            });
+
+            fetchData(`${process.env.REACT_APP_API_URL}/api/main/lrank`, (data) => {
+                if (data && data.rank) {
+                    setLocalRank(data.rank);
+                } else {
+                    setLocalRank([]); // 빈 배열로 설정
+                }
+            });
         }
-    };
+    }, [defaultStatistics, defaultLocalRank]);
 
     useEffect(() => {
         initializeData(); // 데이터 초기화 및 API 호출
-    }, []);
+    }, [initializeData]);
 
     return (
         <div>
@@ -93,25 +91,9 @@ function MainPage() {
                     <p>Loading statistics...</p>
                 )}
             </div>
-
-            {/* rank 데이터 표시 */}
-            {/* <div>
-                <h2>특성 순위</h2>
-                {rank ? (
-                    <ul>
-                        {rank.map((item, index) => (
-                            <li key={index}>{item}</li> // rank 목록 표시
-                        ))}
-                    </ul>
-                ) : error ? (
-                    <div style={{ color: "red" }}>{error}</div> // 오류 메시지 표시
-                ) : (
-                    <p>Loading rank...</p>
-                )}
-            </div> */}
             <div>
                 <h2>지역 순위</h2>
-                {rank ? (
+                {local_rank && local_rank.length > 0 ? (
                     <ul>
                         {local_rank.map((item, index) => (
                             <li key={index}>{item}</li> // rank 목록 표시
@@ -120,7 +102,7 @@ function MainPage() {
                 ) : error ? (
                     <div style={{ color: "red" }}>{error}</div> // 오류 메시지 표시
                 ) : (
-                    <p>Loading rank...</p>
+                    <p>순위를 측정할 데이터가 없습니다!</p>
                 )}
             </div>
         </div>
