@@ -1,0 +1,100 @@
+/* 페이지 전체 스타일 */
+.page-wrapper {
+    background-color: #F5F5F5; /* 밝은 회색 배경 */
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+/* 메인 콘텐츠 영역 */
+.main-content {
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    gap: 30px;
+}
+
+/* 프로필 사진과 세부 내용 섹션 */
+.profile-section {
+    display: flex;
+    justify-content: space-between; /* 양옆으로 배치 */
+    gap: 20px;
+}
+
+.profile-box {
+    background-color: #E6E6FA; /* 라벤더 배경 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image {
+    width: 300px;       /* 원하는 너비 */
+    height: 300px;      /* 원하는 높이 (너비와 같게 설정) */
+    border-radius: 50%; /* 원형으로 만들기 */
+    overflow: hidden;   /* 이미지가 원형을 벗어나지 않도록 설정 */
+}
+
+.details-box {
+    background-color: #E6E6FA; /* 라벤더 배경 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1; /* 두 박스가 동일한 크기로 배치됨 */
+}
+
+/* 통계 데이터, 특성 Rank, 지역 순위 섹션 */
+.data-section {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between; /* 세 개의 박스를 가로로 배치 */
+}
+
+/* 통계 데이터 그래프의 위치를 수직으로 정렬 */
+.chart-wrapper {
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    height: 300px; /* 그래프의 크기 */
+}
+
+.data-box {
+    background-color: #E6E6FA; /* 라벤더 */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.rank-box,
+.local-rank-box {
+    background-color: #E6E6FA; /* 라벤더 배경 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+/* 추천 친구와 랜덤 친구 섹션 */
+.friend-section {
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    gap: 20px;
+}
+
+.suggested-friends-box,
+.random-friends-box {
+    background-color: #E6E6FA; /* 라벤더 배경 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 리스트 스타일 */
+ul {
+    padding-left: 20px;
+}
+
+li {
+    list-style-type: disc;
+    margin-bottom: 10px;
+}

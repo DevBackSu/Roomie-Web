@@ -1,8 +1,8 @@
 /* 기본 레이아웃 */
 .header {
     width: auto;
-    padding: 10px 20px 10px 20px;
-    background-color: #f4f4f4; /* 배경색 */
+    padding: 20px 20px 20px 20px;
+    background-color: #d2d0d0; /* 배경색 */
 }
 
 .nav {

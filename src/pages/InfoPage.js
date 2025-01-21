@@ -36,10 +36,10 @@ function InfoPage() {
 
         // mainAnimal 값을 숫자로 변환
         if (name === "mainAnimal") {
-            // "부엉이"는 2, "종달새"는 1
+            // "올빼미"는 2, "종달새"는 1
             setFormData((prev) => ({
                 ...prev,
-                [name]: value === "부엉이" ? 2 : value === "종달새" ? 1 : "",
+                [name]: value === "올빼미" ? 2 : value === "종달새" ? 1 : "",
             }));
         } else if (name === "imgUrl") {
             // imgUrl은 숫자로 변환 (이미지 선택 번호)
@@ -157,7 +157,7 @@ function InfoPage() {
                         <input
                             type="radio"
                             name="mainAnimal"
-                            value="부엉이"
+                            value="올빼미"
                             checked={formData.mainAnimal === 2}
                             onChange={handleChange}
                             required

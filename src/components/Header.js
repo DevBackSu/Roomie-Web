@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { logout } from "../utils/auth";
-import "../css/Header.css"; // 스타일
+import "../css/header.css"; // 스타일
 
 function Header() {
     const accessToken = localStorage.getItem("accessToken");  // access token 확인

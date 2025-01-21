@@ -1,0 +1,45 @@
+/* 푸터 */
+.footer {
+    background-color: #9B4D96; /* 보라색 톤 */
+    color: white;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+/* nav 내의 항목들을 왼쪽 정렬 */
+.nav {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    text-align: left; /* 텍스트를 왼쪽으로 정렬 */
+}
+
+/* 개발 정보 텍스트 */
+.dev-info {
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+/* GitHub 링크 스타일 */
+.github-link {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트 수평 정렬 */
+    color: white;
+    text-decoration: none;
+}
+
+/* GitHub 로고 스타일 */
+.github-logo {
+    width: 20px; /* 원하는 크기로 설정 */
+    height: 20px; /* 원하는 크기로 설정 */
+    margin-right: 10px; /* 이미지와 텍스트 사이에 여백 추가 */
+}
+
+/* GitHub 텍스트 스타일 */
+.github-link span {
+    font-weight: bold;
+}
+
+/* 링크 호버 시 스타일 */
+.github-link:hover {
+    text-decoration: underline;
+}
