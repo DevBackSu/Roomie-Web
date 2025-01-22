@@ -26,7 +26,7 @@ function OAuthCallbackPage() {
 
         if (accessToken) {
             // accessToken을 저장
-            saveTokens(accessToken, null);
+            saveTokens(accessToken, role);
 
             if(role === "USER")
             {

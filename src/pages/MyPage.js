@@ -35,7 +35,7 @@ function MyPage() {
                 }
 
                 const data = await response.json();
-                setUserData(data.userData); // API 응답에서 userData를 저장
+                setUserData(data.data); // API 응답에서 userData를 저장
             } catch (err) {
                 setError(err.message); // 오류 발생 시 상태 업데이트
             } finally {

@@ -3,8 +3,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import { logout } from "../utils/auth";
-import { Doughnut } from 'react-chartjs-2';  // Chart.js에서 Doughnut 차트 사용
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';  // Chart.js 기능 임포트
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import "../css/main.css";
 
 // Chart.js 등록
@@ -12,10 +12,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function MainPage() {
     const [statistics, setStatistics] = useState(null); // 통계 데이터를 저장할 상태
-    const [local_rank, setLocalRank] = useState(null); // rank 데이터를 저장할 상태
+    const [localRank, setLocalRank] = useState(null); // rank 데이터를 저장할 상태
     const [error, setError] = useState(null); // 오류 상태
 
-    // 기본값 설정
     const defaultLocalRank = useMemo(() => ["서울", "제주", "부산", "아산", "대전"], []);
 
     // API 호출 및 데이터 가져오기 함수
@@ -36,37 +35,60 @@ function MainPage() {
             }
 
             const data = await response.json();
-            console.log(`Fetched data from ${url}:`, data); // 디버깅용 로그
+            console.log(`Fetched data from ${url}:`, data);
             setter(data);
         } catch (err) {
             console.error("Error fetching data:", err);
             setter(null); // API 호출 실패 시 데이터를 null로 설정하여 기본값 표시
-            setError(err.message || "데이터를 불러오는 데 실패했습니다."); // 오류 상태 설정
+            setError(err.message || "데이터를 불러오는 데 실패했습니다.");
         }
     };
 
-    // 초기화 함수
+    // 데이터 로딩 및 캐시 체크
     const initializeData = useCallback(() => {
-        const accessToken = localStorage.getItem("accessToken"); // Access Token 확인
+        const accessToken = localStorage.getItem("accessToken");
 
         if (!accessToken) {
             console.log("Access Token 없음. 기본값으로 설정.");
             setLocalRank(defaultLocalRank); // 기본값 설정
         } else {
-            // Access Token이 있을 경우 API 호출
-            fetchData(`${process.env.REACT_APP_API_URL}/api/main/statistics`, (data) => {
-                if (data) {
-                    setStatistics(data);
-                }
-            });
+            const lastFetchTime = localStorage.getItem("lastFetchTime");
+            const currentTime = new Date().getTime();
 
-            fetchData(`${process.env.REACT_APP_API_URL}/api/main/lrank`, (data) => {
-                if (data && data.rank) {
-                    setLocalRank(data.rank);
-                } else {
-                    setLocalRank([]); // 빈 배열로 설정
+            // 12시간이 지난 경우 API를 새로 호출
+            if (!lastFetchTime || currentTime - lastFetchTime >= 12 * 60 * 60 * 1000) {
+                // Access Token이 있을 경우 API 호출
+                fetchData(`${process.env.REACT_APP_API_URL}/api/main/statistics`, (data) => {
+                    if (data) {
+                        setStatistics(data);
+                        localStorage.setItem("statistics", JSON.stringify(data)); // 로컬스토리지에 데이터 저장
+                    }
+                });
+
+                fetchData(`${process.env.REACT_APP_API_URL}/api/main/lrank`, (data) => {
+                    if (data && data.rank) {
+                        setLocalRank(data.rank);
+                        localStorage.setItem("localRank", JSON.stringify(data.rank)); // 로컬스토리지에 데이터 저장
+                    } else {
+                        setLocalRank([]);
+                    }
+                });
+
+                // 마지막 요청 시간 갱신
+                localStorage.setItem("lastFetchTime", currentTime.toString());
+            } else {
+                // 캐시된 데이터를 사용
+                const cachedStatistics = localStorage.getItem("statistics");
+                const cachedLocalRank = localStorage.getItem("localRank");
+
+                if (cachedStatistics) {
+                    setStatistics(JSON.parse(cachedStatistics));
                 }
-            });
+
+                if (cachedLocalRank) {
+                    setLocalRank(JSON.parse(cachedLocalRank));
+                }
+            }
         }
     }, [defaultLocalRank]);
 
@@ -76,19 +98,18 @@ function MainPage() {
 
     // 원형 그래프 데이터를 위한 설정
     const chartData = statistics ? {
-        labels: ['종달새형', '올빼미형'], // 라벨
+        labels: ['종달새형', '올빼미형'],
         datasets: [
             {
                 data: [
-                    Number(statistics["1"]) === 0 ? null : Number(statistics["1"]), // value1이 0이면 해당 부분을 그리지 않음
-                    Number(statistics["2"]) === 0 ? null : Number(statistics["2"]), // value2가 0이면 해당 부분을 그리지 않음
+                    Number(statistics["1"]) === 0 ? null : Number(statistics["1"]),
+                    Number(statistics["2"]) === 0 ? null : Number(statistics["2"]),
                 ],
-                backgroundColor: ['#A0D1F5', '#1F3A61'], // 각 구역 색상
+                backgroundColor: ['#A0D1F5', '#1F3A61'],
                 hoverBackgroundColor: ['#A0D1F5', '#1F3A61'],
             },
         ],
     } : {
-        // Access token이 없거나 statistics가 null일 경우 기본값을 사용
         labels: ['종달새형', '올빼미형'],
         datasets: [
             {
@@ -109,13 +130,11 @@ function MainPage() {
                 <button onClick={logout}>Logout</button>
                 <br />
                 <div className="main-content">
-                    {/* 프로필 사진과 세부 내용 섹션 */}
                     <div className="profile-section">
                         <div className="profile-box">
-                            <h2>프로필 사진</h2>
                             <div className="profile-image">
                                 <img src="/img/ball.jpg" alt="기본 사진"/>
-                            </div> {/* 여기에 실제 프로필 이미지를 추가 */}
+                            </div>
                         </div>
                         <div className="details-box">
                             <h2>세부내용</h2>
@@ -123,13 +142,12 @@ function MainPage() {
                         </div>
                     </div>
 
-                    {/* 통계 데이터, 특성 순위, 지역 순위 섹션 */}
                     <div className="data-section">
                         <div className="data-box">
                             <h2>통계 데이터</h2>
                             <div className="chart-wrapper">
                                 {chartData ? (
-                                    <Doughnut data={chartData} /> // 원형 그래프 표시
+                                    <Doughnut data={chartData} />
                                 ) : error ? (
                                     <div style={{ color: "red" }}>{error}</div>
                                 ) : (
@@ -145,9 +163,9 @@ function MainPage() {
 
                         <div className="local-rank-box">
                             <h2>Local Rank</h2>
-                            {local_rank && local_rank.length > 0 ? (
+                            {localRank && localRank.length > 0 ? (
                                 <ul>
-                                    {local_rank.map((item, index) => (
+                                    {localRank.map((item, index) => (
                                         <li key={index}>{item}</li>
                                     ))}
                                 </ul>
@@ -157,7 +175,6 @@ function MainPage() {
                         </div>
                     </div>
 
-                    {/* 추천 친구와 랜덤 친구 섹션 */}
                     <div className="friend-section">
                         <div className="suggested-friends-box">
                             <h2>추천 친구</h2>

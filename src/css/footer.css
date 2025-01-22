@@ -6,12 +6,40 @@
     margin-top: 10px;
 }
 
-/* nav 내의 항목들을 왼쪽 정렬 */
+/* nav 내의 항목들을 왼쪽과 오른쪽으로 정렬 */
 .nav {
     display: flex;
-    justify-content: flex-start; /* 왼쪽 정렬 */
+    justify-content: space-between; /* 왼쪽과 오른쪽 구역을 분리 */
     align-items: center; /* 수직 중앙 정렬 */
+}
+
+/* 왼쪽 구역 */
+.left-section {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+}
+
+/* 오른쪽 구역 */
+.right-section {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
     text-align: left; /* 텍스트를 왼쪽으로 정렬 */
+}
+
+/* 회원 탈퇴 버튼 */
+.delete-account-btn {
+    background-color: #ff4d4d; /* 빨간색 배경 */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-account-btn:hover {
+    background-color: #ff1a1a; /* 호버 시 더 진한 빨간색 */
 }
 
 /* 개발 정보 텍스트 */
