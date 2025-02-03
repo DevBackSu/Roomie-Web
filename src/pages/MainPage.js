@@ -14,6 +14,7 @@ function MainPage() {
     const [statistics, setStatistics] = useState(null); // 통계 데이터를 저장할 상태
     const [localRank, setLocalRank] = useState(null); // rank 데이터를 저장할 상태
     const [error, setError] = useState(null); // 오류 상태
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("accessToken")); // 로그인 여부 확인
 
     const defaultLocalRank = useMemo(() => ["서울", "제주", "부산", "아산", "대전"], []);
 
@@ -51,7 +52,9 @@ function MainPage() {
         if (!accessToken) {
             console.log("Access Token 없음. 기본값으로 설정.");
             setLocalRank(defaultLocalRank); // 기본값 설정
+            setIsLoggedIn(false);
         } else {
+            setIsLoggedIn(true);
             const lastFetchTime = localStorage.getItem("lastFetchTime");
             const currentTime = new Date().getTime();
 
@@ -130,17 +133,22 @@ function MainPage() {
                 <button onClick={logout}>Logout</button>
                 <br />
                 <div className="main-content">
-                    <div className="profile-section">
-                        <div className="profile-box">
+                {isLoggedIn ? (
+                        <div className="profile-section">
                             <div className="profile-image">
                                 <img src="/img/ball.jpg" alt="기본 사진"/>
                             </div>
+                            <div className="details-box">
+                                <h2>세부내용</h2>
+                                <p>사용자 세부 내용...</p>
+                            </div>
                         </div>
-                        <div className="details-box">
-                            <h2>세부내용</h2>
-                            <p>사용자 세부 내용...</p>
+                    ) : (
+                        <div className="notLogin-section">
+                            <img src="/img/logo.png" alt="사이트 로고" className="logo-image"/>
+                            <p>해당 사이트는 사용자 맞춤 분석 및 추천 기능을 제공합니다.</p>
                         </div>
-                    </div>
+                    )}
 
                     <div className="data-section">
                         <div className="data-box">
