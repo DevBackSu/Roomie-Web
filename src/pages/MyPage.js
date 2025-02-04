@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+import "../css/mypage.css";
 
 function MyPage() {
     const [userData, setUserData] = useState(null); // 사용자 데이터를 저장할 상태
@@ -76,19 +78,26 @@ function MyPage() {
     return (
         <div>
             <Header />
-            <h1>MyPage</h1>
-            <p>이름: {userData.nickname}</p>
-            <p>이메일: {userData.email}</p>
-            <p>성별: {userData.gender}</p>
-            <p>나이: {formatBirthDate(userData.birthDate)}</p>
-            <p>학교: {userData.school}</p>
-            <p>지역: {userData.local}</p>
-            <p>소셜 타입: {userData.socialType}</p>
-            <p>역할: {userData.role}</p>
-            {userData.imgUrl && <img src={userData.imgUrl} alt="프로필" />}
-            <button onClick={handleEditClick} style={{ marginTop: "20px" }}>
-                수정하기
-            </button>
+            <div className="mypage-container">
+            <h1 className="mypage-title">MyPage</h1>
+                <div className="mypage-info">
+                    <p>이름: {userData.nickname}</p>
+                    <p>이메일: {userData.email}</p>
+                    <p>성별: {userData.gender}</p>
+                    <p>나이: {formatBirthDate(userData.birthDate)}</p>
+                    <p>학교: {userData.school}</p>
+                    <p>지역: {userData.local}</p>
+                    <p>소셜 타입: {userData.socialType}</p>
+                    <p>역할: {userData.role}</p>
+                    {userData.imgUrl && <img src={userData.imgUrl} alt="프로필" className="mypage-img"/>}
+                </div>
+                <div>
+                    <button onClick={handleEditClick} className="mypage-button">
+                        수정하기
+                    </button>
+                </div>
+            </div>
+            <Footer />
         </div>
     );
 }

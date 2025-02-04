@@ -6,8 +6,7 @@
 주제 / 간단하게 어떤 사이트인지 작성하기
 
 ### :mag: 기술 스택
-+ React
-+ Spring boot
++ ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
 ### :computer: 개발
 + 1인
