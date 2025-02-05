@@ -12,11 +12,13 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function MainPage() {
     const [statistics, setStatistics] = useState(null); // 통계 데이터를 저장할 상태
-    const [localRank, setLocalRank] = useState(null); // rank 데이터를 저장할 상태
+    const [localRank, setLocalRank] = useState(null); // 지역 순위를 저장할 상태
+    const [characterRank, setCharacterRank] = useState(null); // 특성 순위를 저장할 상태
     const [error, setError] = useState(null); // 오류 상태
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("accessToken")); // 로그인 여부 확인
 
     const defaultLocalRank = useMemo(() => ["서울", "제주", "부산", "아산", "대전"], []);
+    const defaultCharacterRank = useMemo(() => ["특성 A", "특성 B", "특성 C", "특성 D", "특성 E"], []);
 
     // API 호출 및 데이터 가져오기 함수
     const fetchData = async (url, setter) => {
@@ -52,6 +54,7 @@ function MainPage() {
         if (!accessToken) {
             console.log("Access Token 없음. 기본값으로 설정.");
             setLocalRank(defaultLocalRank); // 기본값 설정
+            setCharacterRank(defaultCharacterRank); // 기본값 설정
             setIsLoggedIn(false);
         } else {
             setIsLoggedIn(true);
@@ -77,12 +80,22 @@ function MainPage() {
                     }
                 });
 
+                fetchData(`${process.env.REACT_APP_API_URL}/api/main/crank`, (data) => {
+                    if (data && data.characterRank) {
+                        setCharacterRank(data.characterRank);
+                        localStorage.setItem("characterRank", JSON.stringify(data.characterRank)); // 로컬스토리지에 데이터 저장
+                    } else {
+                        setCharacterRank([]);
+                    }
+                });
+
                 // 마지막 요청 시간 갱신
                 localStorage.setItem("lastFetchTime", currentTime.toString());
             } else {
                 // 캐시된 데이터를 사용
                 const cachedStatistics = localStorage.getItem("statistics");
                 const cachedLocalRank = localStorage.getItem("localRank");
+                const cachedCharacterRank = localStorage.getItem("characterRank");
 
                 if (cachedStatistics) {
                     setStatistics(JSON.parse(cachedStatistics));
@@ -91,9 +104,13 @@ function MainPage() {
                 if (cachedLocalRank) {
                     setLocalRank(JSON.parse(cachedLocalRank));
                 }
+
+                if (cachedCharacterRank) {
+                    setCharacterRank(JSON.parse(cachedCharacterRank));
+                }
             }
         }
-    }, [defaultLocalRank]);
+    }, [defaultLocalRank, defaultCharacterRank]);
 
     useEffect(() => {
         initializeData(); // 데이터 초기화 및 API 호출
@@ -166,7 +183,15 @@ function MainPage() {
 
                         <div className="rank-box">
                             <h2>특성 Rank</h2>
-                            <p>특성 Rank 데이터...</p>
+                            {characterRank && characterRank.length > 0 ? (
+                                <ul>
+                                    {characterRank.map((item, index) => (
+                                        <li key={index}>{index + 1}. {item}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>특성 순위를 측정할 데이터가 없습니다!</p>
+                            )}
                         </div>
 
                         <div className="local-rank-box">
