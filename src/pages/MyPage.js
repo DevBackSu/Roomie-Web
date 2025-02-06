@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import "../css/mypage.css";
 
-function MyPage() {
-    const [userData, setUserData] = useState(null); // 사용자 데이터를 저장할 상태
-    const [loading, setLoading] = useState(true);   // 로딩 상태
-    const [error, setError] = useState(null);       // 오류 상태
+function MypageUpdate() {
+    const [formData, setFormData] = useState(null); // 사용자 데이터 저장
+    const [userRank, setUserRank] = useState([]); // 특성 Rank 저장
+    const [userSelf, setUserSelf] = useState(""); // 자기소개 저장
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUserData = async () => {
+        const fetchData = async () => {
             const accessToken = localStorage.getItem("accessToken");
 
             if (!accessToken) {
-                navigate("/login"); // 로그인 상태가 아니면 로그인 페이지로 리다이렉트
+                alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+                navigate("/login");
                 return;
             }
 
+            setLoading(true);
             try {
                 const response = await fetch(`${process.env.REACT_APP_API_URL}/api/mypage/`, {
                     method: "GET",
@@ -29,38 +30,69 @@ function MyPage() {
                 });
 
                 if (!response.ok) {
-                    if (response.status === 404) {
-                        throw new Error("존재하지 않는 사용자입니다.");
-                    } else {
-                        throw new Error("데이터를 불러오는 데 실패했습니다.");
-                    }
+                    throw new Error("사용자 데이터를 불러오는 데 실패했습니다.");
                 }
 
                 const data = await response.json();
-                setUserData(data.data); // API 응답에서 userData를 저장
+
+                if (data.success) {
+                    setFormData(data); // 사용자 데이터 저장
+                    setUserRank(data.list); // 특성 Rank 저장
+                    setUserSelf(data.self); // 자기소개 저장
+                } else {
+                    throw new Error(data.message || "사용자 정보를 가져오지 못했습니다.");
+                }
             } catch (err) {
-                setError(err.message); // 오류 발생 시 상태 업데이트
+                setError(err.message || "오류가 발생했습니다.");
             } finally {
-                setLoading(false); // 로딩 끝
+                setLoading(false);
             }
         };
 
-        fetchUserData();
+        fetchData();
     }, [navigate]);
 
-    const formatBirthDate = (birthDate) => {
-        if (!birthDate) return null;
-
-        // 날짜를 연도와 월로 분리
-        const [year, month] = birthDate.split("-");
-        const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
-
-        // 결과 문자열 생성
-        return `${year}년 ${monthNames[parseInt(month, 10) - 1]}`;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
-    const handleEditClick = () => {
-        navigate("/mypageUpdate", { state: { userData } }); // userData를 state로 전달
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+            navigate("/login");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/mypage/mypageUpdage`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error("정보 저장에 실패했습니다.");
+            }
+
+            alert("정보가 저장되었습니다.");
+            navigate("/mypage");
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (loading) {
@@ -71,35 +103,54 @@ function MyPage() {
         return <div>오류: {error}</div>;
     }
 
-    if (!userData) {
-        return <div>사용자 정보가 없습니다.</div>;
-    }
-
     return (
         <div>
-            <Header />
-            <div className="mypage-container">
-            <h1 className="mypage-title">MyPage</h1>
-                <div className="mypage-info">
-                    <p>이름: {userData.nickname}</p>
-                    <p>이메일: {userData.email}</p>
-                    <p>성별: {userData.gender}</p>
-                    <p>나이: {formatBirthDate(userData.birthDate)}</p>
-                    <p>학교: {userData.school}</p>
-                    <p>지역: {userData.local}</p>
-                    <p>소셜 타입: {userData.socialType}</p>
-                    <p>역할: {userData.role}</p>
-                    {userData.imgUrl && <img src={userData.imgUrl} alt="프로필" className="mypage-img"/>}
-                </div>
-                <div>
-                    <button onClick={handleEditClick} className="mypage-button">
-                        수정하기
-                    </button>
-                </div>
-            </div>
-            <Footer />
+            <h1>마이페이지</h1>
+            <form onSubmit={handleSubmit}>
+                {formData && (
+                    <>
+                        <div>
+                            <label>닉네임:</label>
+                            <input
+                                type="text"
+                                name="nickname"
+                                value={formData.nickname || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <label>이메일:</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <label>자기소개:</label>
+                            <textarea
+                                name="self"
+                                value={userSelf || ""}
+                                readOnly
+                            />
+                        </div>
+                        <div>
+                            <label>특성 Rank:</label>
+                            <ul>
+                                {userRank.map((rank, index) => (
+                                    <li key={rank.id}>
+                                        {index + 1}. {rank.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <button type="submit">정보 수정</button>
+                    </>
+                )}
+            </form>
         </div>
     );
 }
 
-export default MyPage;
+export default MypageUpdate;
