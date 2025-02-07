@@ -58,63 +58,54 @@ function MainPage() {
             setIsLoggedIn(false);
         } else {
             setIsLoggedIn(true);
-            const lastFetchTime = localStorage.getItem("lastFetchTime");
-            const currentTime = new Date().getTime();
-
-            // 12시간이 지난 경우 API를 새로 호출
-            if (!lastFetchTime || currentTime - lastFetchTime >= 12 * 60 * 60 * 1000) {
-                // Access Token이 있을 경우 API 호출
-                fetchData(`${process.env.REACT_APP_API_URL}/api/main/statistics`, (data) => {
-                    if (data) {
-                        setStatistics(data);
-                        localStorage.setItem("statistics", JSON.stringify(data)); // 로컬스토리지에 데이터 저장
-                    }
-                });
-
-                fetchData(`${process.env.REACT_APP_API_URL}/api/main/lrank`, (data) => {
-                    if (data && data.rank) {
-                        setLocalRank(data.rank);
-                        localStorage.setItem("localRank", JSON.stringify(data.rank)); // 로컬스토리지에 데이터 저장
-                    } else {
-                        setLocalRank([]);
-                    }
-                });
-
-                fetchData(`${process.env.REACT_APP_API_URL}/api/main/crank`, (data) => {
-                    if (data && data.characterRank) {
-                        setCharacterRank(data.characterRank);
-                        localStorage.setItem("characterRank", JSON.stringify(data.characterRank)); // 로컬스토리지에 데이터 저장
-                    } else {
-                        setCharacterRank([]);
-                    }
-                });
-
-                // 마지막 요청 시간 갱신
-                localStorage.setItem("lastFetchTime", currentTime.toString());
-            } else {
-                // 캐시된 데이터를 사용
-                const cachedStatistics = localStorage.getItem("statistics");
-                const cachedLocalRank = localStorage.getItem("localRank");
-                const cachedCharacterRank = localStorage.getItem("characterRank");
-
-                if (cachedStatistics) {
-                    setStatistics(JSON.parse(cachedStatistics));
+            // API 호출
+            fetchData(`${process.env.REACT_APP_API_URL}/api/main/statistics`, (data) => {
+                if (data) {
+                    setStatistics(data);
+                    localStorage.setItem("statistics", JSON.stringify(data)); // 로컬스토리지에 데이터 저장
                 }
+            });
 
-                if (cachedLocalRank) {
-                    setLocalRank(JSON.parse(cachedLocalRank));
+            fetchData(`${process.env.REACT_APP_API_URL}/api/main/lrank`, (data) => {
+                if (data && data.rank) {
+                    setLocalRank(data.rank);
+                    localStorage.setItem("localRank", JSON.stringify(data.rank)); // 로컬스토리지에 데이터 저장
+                } else {
+                    setLocalRank([]);
                 }
+            });
 
-                if (cachedCharacterRank) {
-                    setCharacterRank(JSON.parse(cachedCharacterRank));
+            fetchData(`${process.env.REACT_APP_API_URL}/api/main/crank`, (data) => {
+                console.log("통계 데이터");
+                if (data && data.characterRank) {
+                    setCharacterRank(data.characterRank);
+                    localStorage.setItem("characterRank", JSON.stringify(data.characterRank)); // 로컬스토리지에 데이터 저장
+                } else {
+                    setCharacterRank([]);
                 }
-            }
+            });
         }
     }, [defaultLocalRank, defaultCharacterRank]);
 
-    useEffect(() => {
-        initializeData(); // 데이터 초기화 및 API 호출
+    // 매일 자정에 API 호출
+    const scheduleDailyFetch = useCallback(() => {
+        const now = new Date();
+        const nextMidnight = new Date(now);
+        nextMidnight.setHours(24, 0, 0, 0); // 자정 시간 설정
+
+        const timeUntilMidnight = nextMidnight - now; // 자정까지 남은 시간
+
+        // 자정에 맞춰 API 호출 설정
+        setTimeout(() => {
+            initializeData(); // 자정에 데이터 초기화 함수 호출
+            scheduleDailyFetch(); // 자정을 지나면 다시 호출을 예약
+        }, timeUntilMidnight);
     }, [initializeData]);
+
+    useEffect(() => {
+        initializeData(); // 페이지 로드시 데이터 초기화 및 API 호출
+        scheduleDailyFetch(); // 매일 자정에 API 호출 예약
+    }, [initializeData, scheduleDailyFetch]);
 
     // 원형 그래프 데이터를 위한 설정
     const chartData = statistics ? {

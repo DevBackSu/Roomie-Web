@@ -8,6 +8,7 @@ import OAuthCallbackPage from "./pages/OAuthCallbackPage";
 import MyPage from "./pages/MyPage"
 import ErrorPage from "./pages/ErrorPage";
 import MyPageUpdate from "./pages/MyPageUpdate";
+import userCharacter from "./pages/UserCharacterPage"
 
 function App() {
     return (
@@ -25,6 +26,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <InfoPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/userCharacter"
+                    element={
+                        <ProtectedRoute>
+                            <userCharacter />
                         </ProtectedRoute>
                     }
                 />

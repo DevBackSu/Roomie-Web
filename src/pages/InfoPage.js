@@ -25,7 +25,7 @@ function InfoPage() {
     };
 
     useEffect(() => {
-        if (checkRole()) {
+        if (!checkRole()) {
             console.log("role이 USER입니다. /으로 이동합니다.");
             navigate("/");
         }
@@ -82,7 +82,9 @@ function InfoPage() {
     
                 saveTokens(newAccessToken); // accessToken 저장
                 alert("정보가 저장되었습니다!");
-                navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
+                // navigate("/"); // 성공적으로 저장되면 메인 페이지로 이동
+                navigate("/userCharacter"); // 성공적으로 저장되면 메인 페이지로 이동
+                // 메인 페이지 이동 X -> 특성, 마이페이지 작성 페이지로 이동해야 함
             } else {
                 alert("정보 저장에 실패했습니다. 새로 고침 후 다시 시도해주세요.");
             }
