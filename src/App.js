@@ -8,7 +8,7 @@ import OAuthCallbackPage from "./pages/OAuthCallbackPage";
 import MyPage from "./pages/MyPage"
 import ErrorPage from "./pages/ErrorPage";
 import MyPageUpdate from "./pages/MyPageUpdate";
-import userCharacter from "./pages/UserCharacterPage"
+import UserCharacter from "./pages/UserCharacterPage";
 
 function App() {
     return (
@@ -33,7 +33,7 @@ function App() {
                     path="/userCharacter"
                     element={
                         <ProtectedRoute>
-                            <userCharacter />
+                            <UserCharacter />
                         </ProtectedRoute>
                     }
                 />

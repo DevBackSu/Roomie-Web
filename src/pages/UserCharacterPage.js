@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../css/UserCharacterPage.css";
+import "../css/userCharacter.css";
 
 function UserCharacterPage() {
     const [selectedCharacteristics, setSelectedCharacteristics] = useState([]);
