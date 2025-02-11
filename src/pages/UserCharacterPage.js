@@ -18,12 +18,16 @@ function UserCharacterPage() {
         { id: 5, name: "조용한게 좋아요" },
         { id: 6, name: "대화하고 싶어요" },
         { id: 7, name: "깨끗한게 좋아요" },
-        { id: 8, name: "깨끗하지 않아도 상관 없어요"}
+        { id: 8, name: "깨끗하지 않아도 상관 없어요" }
     ];
 
     // 상태 관리: 선택된 특성 ID와 자기소개
     const [selectedCharacteristics, setSelectedCharacteristics] = useState([]);
     const [introduction, setIntroduction] = useState("");
+    // const [useDefaultIntroduction, setUseDefaultIntroduction] = useState(false);
+
+    // 기본 자기소개 내용
+    const defaultIntroduction = "만나서 반가워요!";
 
     // 특성 선택/해제 핸들러
     const toggleCharacteristic = (characteristicId) => {
@@ -49,10 +53,13 @@ function UserCharacterPage() {
             return;
         }
 
+        // 자기소개에 기본 내용을 사용할지 여부에 따른 처리
+        const finalIntroduction = introduction.trim() === "" ? defaultIntroduction : introduction;
+
         // 서버로 전송할 데이터
         const userOtherDTO = {
             features: selectedCharacteristics, // 선택한 특성들의 ID만 전송
-            self: introduction, // 자기소개
+            self: finalIntroduction, // 최종 자기소개
         };
 
         // 헤더에서 access token 가져오기 (예: localStorage에서 가져오기)
@@ -125,6 +132,13 @@ function UserCharacterPage() {
                         <p className="section-subtitle">
                             만약 위 특성 외에 공유하고 싶은 내용이 있다면 아래에 입력해주세요!
                         </p>
+
+                        {/* 주의 사항: 자기소개를 입력하지 않으면 기본 내용이 자동으로 입력됨 */}
+                        <p className="intro-warning">
+                            * 자기소개를 입력하지 않으면 기본 내용인 "<strong>만나서 반가워요!</strong>"가 자동으로 입력됩니다.
+                        </p>
+
+                        {/* 자기소개 텍스트박스 */}
                         <textarea
                             className="introduction-textarea"
                             rows="5"
