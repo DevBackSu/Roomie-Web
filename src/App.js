@@ -9,6 +9,7 @@ import MyPage from "./pages/MyPage"
 import ErrorPage from "./pages/ErrorPage";
 import MyPageUpdate from "./pages/MyPageUpdate";
 import UserCharacter from "./pages/UserCharacterPage";
+import MyOtherUpdate from "./pages/MyOtherUpdate";
 
 function App() {
     return (
@@ -45,6 +46,11 @@ function App() {
                 <Route path="/mypageUpdate" element = {
                     <ProtectedRoute>
                         <MyPageUpdate />
+                    </ProtectedRoute>
+                } />
+                <Route path="/myotherUpdate" element = {
+                    <ProtectedRoute>
+                        <MyOtherUpdate />
                     </ProtectedRoute>
                 } />
 

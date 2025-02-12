@@ -6,6 +6,8 @@ import "../css/mypage.css";
 
 function MyPage() {
     const [userData, setUserData] = useState(null); // 사용자 데이터를 저장할 상태
+    const [userCharacter, setUserCharacter] = useState([]); // 특성 리스트 저장
+    const [selfIntroduction, setSelfIntroduction] = useState(""); // 자기소개
     const [loading, setLoading] = useState(true);   // 로딩 상태
     const [error, setError] = useState(null);       // 오류 상태
     const navigate = useNavigate();
@@ -37,7 +39,10 @@ function MyPage() {
                 }
 
                 const data = await response.json();
-                setUserData(data.data); // API 응답에서 userData를 저장
+
+                setUserData(data.data); // 사용자 정보 저장
+                setUserCharacter(data.list); // 특성 리스트 저장
+                setSelfIntroduction(data.self); // 자기소개 저장
             } catch (err) {
                 setError(err.message); // 오류 발생 시 상태 업데이트
             } finally {
@@ -51,51 +56,93 @@ function MyPage() {
     const formatBirthDate = (birthDate) => {
         if (!birthDate) return null;
 
-        // 날짜를 연도와 월로 분리
         const [year, month] = birthDate.split("-");
         const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
 
-        // 결과 문자열 생성
         return `${year}년 ${monthNames[parseInt(month, 10) - 1]}`;
     };
 
-    const handleEditClick = () => {
+    // 왼쪽 박스 수정 클릭 시
+    const handleLeftEditClick = () => {
         navigate("/mypageUpdate", { state: { userData } }); // userData를 state로 전달
     };
 
+    // 오른쪽 박스 수정 클릭 시
+    const handleRightEditClick = () => {
+        navigate("/myotherUpdate", { state: { userCharacter, selfIntroduction } }); // userCharacter와 selfIntroduction을 state로 전달
+    };
+
     if (loading) {
-        return <div>로딩 중...</div>;
+        return (
+            <div className="loading">
+                <div className="spinner"></div>
+            </div>
+        );
     }
 
     if (error) {
-        return <div>오류: {error}</div>;
+        return (
+            <div className="error-message">
+                <p>{error}</p>
+                <p>잠시 후 다시 시도해주세요.</p>
+            </div>
+        );
     }
 
     if (!userData) {
-        return <div>사용자 정보가 없습니다.</div>;
+        return (
+            <div className="no-user-data">
+                <p>사용자 정보를 불러오는 데 실패했습니다.</p>
+                <p>잠시 후 다시 시도하거나 관리자에게 문의해 주세요.</p>
+            </div>
+        );
     }
 
     return (
         <div>
             <Header />
             <div className="mypage-container">
-            <h1 className="mypage-title">MyPage</h1>
-                <div className="mypage-info">
-                    <p>이름: {userData.nickname}</p>
-                    <p>이메일: {userData.email}</p>
-                    <p>성별: {userData.gender}</p>
-                    <p>나이: {formatBirthDate(userData.birthDate)}</p>
-                    <p>동물 : {userData.mainAnimal}</p>
-                    <p>학교: {userData.school}</p>
-                    <p>지역: {userData.local}</p>
-                    <p>소셜 타입: {userData.socialType}</p>
-                    <p>역할: {userData.role}</p>
-                    {userData.imgUrl && <img src={userData.imgUrl} alt="프로필" className="mypage-img"/>}
-                </div>
-                <div>
-                    <button onClick={handleEditClick} className="mypage-button">
-                        수정하기
-                    </button>
+                <h1 className="mypage-title">MyPage</h1>
+                <div className="mypage-content">
+                    {/* 왼쪽 박스: 사용자 정보 */}
+                    <div className="mypage-info">
+                        <p><strong>이름:</strong> {userData.nickname}</p>
+                        <p><strong>이메일:</strong> {userData.email}</p>
+                        <p><strong>성별:</strong> {userData.gender}</p>
+                        <p><strong>나이:</strong> {formatBirthDate(userData.birthDate)}</p>
+                        <p><strong>동물:</strong> {userData.mainAnimal}</p>
+                        <p><strong>학교:</strong> {userData.school}</p>
+                        <p><strong>지역:</strong> {userData.local}</p>
+                        <p><strong>소셜 타입:</strong> {userData.socialType}</p>
+                        <p><strong>역할:</strong> {userData.role}</p>
+                        <img
+                            src={userData.imgUrl || "/path/to/default-profile.png"}
+                            alt="프로필"
+                            className="mypage-img"
+                        />
+                        <button onClick={handleLeftEditClick} className="mypage-button">내 정보 수정하기</button>
+                    </div>
+
+                    {/* 오른쪽 박스: 특성 및 자기소개 */}
+                    <div className="mypage-extra">
+                        <div className="mypage-characteristics">
+                            <h3>특성</h3>
+                            {userCharacter.length > 0 ? (
+                                <ul>
+                                    {userCharacter.map((char, index) => (
+                                        <li key={index}>{char}</li> // key는 유니크한 값으로 설정
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>등록된 특성이 없습니다.</p>
+                            )}
+                        </div>
+                        <div className="mypage-introduction">
+                            <h3>자기소개</h3>
+                            <p>{selfIntroduction || "자기소개가 등록되지 않았습니다."}</p>
+                        </div>
+                        <button onClick={handleRightEditClick} className="mypage-button">추가 정보 수정하기</button>
+                    </div>
                 </div>
             </div>
             <Footer />
