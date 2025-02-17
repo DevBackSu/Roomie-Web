@@ -62,6 +62,31 @@ function MyPage() {
         return `${year}년 ${monthNames[parseInt(month, 10) - 1]}`;
     };
 
+    // 동물의 이름을 mainAnimal 값에 따라 결정
+    const getAnimalName = (mainAnimal) => {
+        switch (mainAnimal) {
+            case 1:
+                return "종달새";
+            case 2:
+                return "올빼미";
+            default:
+                return "알 수 없음";
+        }
+    };
+
+    // 프로필 이미지 URL을 번호에 맞게 설정
+    const getProfileImage = (imageNumber) => {
+        const imageNames = {
+            1: "book.png",
+            2: "laptop.png",
+            3: "bed.png",
+            4: "wardrobe.png",
+            5: "cleaner.png",
+        };
+
+        return `/img/${imageNames[imageNumber] || "default.png"}`; // 기본값 설정
+    };
+
     // 왼쪽 박스 수정 클릭 시
     const handleLeftEditClick = () => {
         navigate("/mypageUpdate", { state: { userData } }); // userData를 state로 전달
@@ -106,20 +131,20 @@ function MyPage() {
                 <div className="mypage-content">
                     {/* 왼쪽 박스: 사용자 정보 */}
                     <div className="mypage-info">
+                        <img
+                            src={getProfileImage(userData.imgUrl)}
+                            alt="프로필"
+                            className="mypage-img"
+                        />
                         <p><strong>이름:</strong> {userData.nickname}</p>
                         <p><strong>이메일:</strong> {userData.email}</p>
                         <p><strong>성별:</strong> {userData.gender}</p>
                         <p><strong>나이:</strong> {formatBirthDate(userData.birthDate)}</p>
-                        <p><strong>동물:</strong> {userData.mainAnimal}</p>
+                        <p><strong>동물:</strong> {getAnimalName(userData.mainAnimal)}</p>
                         <p><strong>학교:</strong> {userData.school}</p>
                         <p><strong>지역:</strong> {userData.local}</p>
                         <p><strong>소셜 타입:</strong> {userData.socialType}</p>
                         <p><strong>역할:</strong> {userData.role}</p>
-                        <img
-                            src={userData.imgUrl || "/path/to/default-profile.png"}
-                            alt="프로필"
-                            className="mypage-img"
-                        />
                         <button onClick={handleLeftEditClick} className="mypage-button">내 정보 수정하기</button>
                     </div>
 

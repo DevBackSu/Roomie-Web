@@ -52,6 +52,8 @@
     border-radius: 50%;
     margin: 20px auto;
     border: 4px solid #6a4c9c;
+    object-fit: cover;
+    object-position: center; /* 이미지를 중앙에 배치 */
 }
 
 /* 오른쪽 박스 (특성 및 자기소개) */

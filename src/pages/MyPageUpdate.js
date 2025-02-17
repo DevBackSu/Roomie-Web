@@ -67,10 +67,40 @@ function MypageUpdate() {
         return <div>오류: {error}</div>;
     }
 
+    // 이미지 번호를 보여주는 부분
+    const imageOptions = [
+        { num: 1, name: "book.png" },
+        { num: 2, name: "laptop.png" },
+        { num: 3, name: "bed.png" },
+        { num: 4, name: "wardrobe.png" },
+        { num: 5, name: "cleaner.png" },
+    ];
+
     return (
         <div>
             <h1>정보 수정</h1>
             <form onSubmit={handleSubmit}>
+                <div>
+                    <label>프로필 이미지:</label>
+                    <div className="image-options">
+                        {imageOptions.map((image) => (
+                            <label key={image.num}>
+                                <input
+                                    type="radio"
+                                    name="imgUrl"
+                                    value={image.num}
+                                    checked={formData.imgUrl === String(image.num)}
+                                    onChange={handleChange}
+                                />
+                                <img
+                                    src={`/img/${image.name}`}
+                                    alt={image.name}
+                                    style={{ width: 50, height: 50, marginRight: 10 }}
+                                />
+                            </label>
+                        ))}
+                    </div>
+                </div>
                 <div>
                     <label>이름:</label>
                     <input
@@ -113,16 +143,16 @@ function MypageUpdate() {
                     <input
                         type="radio"
                         name="mainAnimal"
-                        value="올빼미"
-                        checked={formData.mainAnimal === 2}
+                        value="2"
+                        checked={formData.mainAnimal === "2"}
                         onChange={handleChange}
                     />
-                    부엉이
+                    올빼미
                     <input
                         type="radio"
                         name="mainAnimal"
-                        value="종달새"
-                        checked={formData.mainAnimal === 1}
+                        value="1"
+                        checked={formData.mainAnimal === "1"}
                         onChange={handleChange}
                     />
                     종달새
@@ -153,21 +183,6 @@ function MypageUpdate() {
                         value={formData.local}
                         onChange={handleChange}
                     />
-                </div>
-                <div>
-                    <label>프로필 이미지:</label>
-                    {[1, 2, 3, 4, 5].map((num) => (
-                        <label key={num}>
-                            <input
-                                type="radio"
-                                name="imgUrl"
-                                value={num}
-                                checked={formData.imgUrl === String(num)}
-                                onChange={handleChange}
-                            />
-                            {num}
-                        </label>
-                    ))}
                 </div>
                 <button type="submit">저장</button>
             </form>
