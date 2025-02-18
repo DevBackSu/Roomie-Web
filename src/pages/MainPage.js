@@ -18,7 +18,7 @@ function MainPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("accessToken")); // 로그인 여부 확인
 
     const defaultLocalRank = useMemo(() => ["서울", "제주", "부산", "아산", "대전"], []);
-    const defaultCharacterRank = useMemo(() => ["특성 A", "특성 B", "특성 C", "특성 D", "특성 E"], []);
+    const defaultCharacterRank = useMemo(() => ["잠귀가 밝아요", "방 안에서 먹어요", "알람이 필수에요", "아침부터 움직여요", "잘 안 나가요"], []);
 
     // API 호출 및 데이터 가져오기 함수
     const fetchData = async (url, setter) => {
