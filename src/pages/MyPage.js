@@ -94,7 +94,7 @@ function MyPage() {
 
     // 오른쪽 박스 수정 클릭 시
     const handleRightEditClick = () => {
-        navigate("/myotherUpdate", { state: { userCharacter, selfIntroduction } }); // userCharacter와 selfIntroduction을 state로 전달
+        navigate("/myotherUpdate", { state: { userCharacter, introduction: selfIntroduction } }); // userCharacter와 selfIntroduction을 state로 전달
     };
 
     if (loading) {

@@ -56,7 +56,7 @@ function MyOtherUpdate() {
             return;
         }
 
-        axios.post(`${process.env.REACT_APP_API_URL}/api/mypage/mypageUpdage`, updateData, {
+        axios.post(`${process.env.REACT_APP_API_URL}/api/mypage/myotherUpdate`, updateData, {
             headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then(() => {

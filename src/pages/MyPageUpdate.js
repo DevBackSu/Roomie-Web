@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import '../css/myPageUpdate.css';
 
 function MypageUpdate() {
     const { state } = useLocation(); // state에서 userData를 받아옵니다.
@@ -37,7 +40,7 @@ function MypageUpdate() {
         setLoading(true);
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/mypage/mypageUpdage`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/mypage/mypageUpdate`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -78,114 +81,58 @@ function MypageUpdate() {
 
     return (
         <div>
-            <h1>정보 수정</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>프로필 이미지:</label>
-                    <div className="image-options">
-                        {imageOptions.map((image) => (
-                            <label key={image.num}>
-                                <input
-                                    type="radio"
-                                    name="imgUrl"
-                                    value={image.num}
-                                    checked={formData.imgUrl === String(image.num)}
-                                    onChange={handleChange}
-                                />
-                                <img
-                                    src={`/img/${image.name}`}
-                                    alt={image.name}
-                                    style={{ width: 50, height: 50, marginRight: 10 }}
-                                />
-                            </label>
-                        ))}
+            <Header />
+            <div className="mypage-update">
+                <h1 className="update-title">수정하기</h1>
+                <form className="update-form" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label>프로필 이미지:</label>
+                        <div className="image-selection">
+                            {imageOptions.map((image) => (
+                                <label key={image.num} className="image-option">
+                                    <input
+                                        type="radio"
+                                        name="imgUrl"
+                                        value={image.num}
+                                        checked={formData.imgUrl === String(image.num)}
+                                        onChange={handleChange}
+                                    />
+                                    <img src={`/img/${image.name}`} alt={image.name} className="profile-img" />
+                                </label>
+                            ))}
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <label>이름:</label>
-                    <input
-                        type="text"
-                        name="nickname"
-                        value={formData.nickname}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label>이메일:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label>성별:</label>
-                    <input
-                        type="radio"
-                        name="gender"
-                        value="남"
-                        checked={formData.gender === "남"}
-                        onChange={handleChange}
-                    />
-                    남
-                    <input
-                        type="radio"
-                        name="gender"
-                        value="여"
-                        checked={formData.gender === "여"}
-                        onChange={handleChange}
-                    />
-                    여
-                </div>
-                <div>
-                    <label>주요 동물:</label>
-                    <input
-                        type="radio"
-                        name="mainAnimal"
-                        value="2"
-                        checked={formData.mainAnimal === "2"}
-                        onChange={handleChange}
-                    />
-                    올빼미
-                    <input
-                        type="radio"
-                        name="mainAnimal"
-                        value="1"
-                        checked={formData.mainAnimal === "1"}
-                        onChange={handleChange}
-                    />
-                    종달새
-                </div>
-                <div>
-                    <label>생년월일:</label>
-                    <input
-                        type="month"
-                        name="birthDate"
-                        value={formData.birthDate}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label>학교:</label>
-                    <input
-                        type="text"
-                        name="school"
-                        value={formData.school}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label>지역:</label>
-                    <input
-                        type="text"
-                        name="local"
-                        value={formData.local}
-                        onChange={handleChange}
-                    />
-                </div>
-                <button type="submit">저장</button>
-            </form>
+                    <div className="form-group">
+                        <label htmlFor="nickname">이름:</label>
+                        <input type="text" id="nickname" name="nickname" value={formData.nickname} onChange={handleChange} required />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">이메일:</label>
+                        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+                    </div>
+                    <div className="form-group">
+                        <label>성별:</label>
+                        <div className="radio-group">
+                            <label><input type="radio" name="gender" value="남" checked={formData.gender === "남"} onChange={handleChange} required /> 남</label>
+                            <label><input type="radio" name="gender" value="여" checked={formData.gender === "여"} onChange={handleChange} required /> 여</label>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="birthDate">생년월일:</label>
+                        <input type="month" id="birthDate" name="birthDate" value={formData.birthDate} onChange={handleChange} required />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="school">학교 (선택):</label>
+                        <input type="text" id="school" name="school" value={formData.school} onChange={handleChange} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="local">지역 (선택):</label>
+                        <input type="text" id="local" name="local" value={formData.local} onChange={handleChange} />
+                    </div>
+                    <button type="submit" className="submit-btn">저장</button>
+                </form>
+            </div>
+            <Footer />
         </div>
     );
 }
