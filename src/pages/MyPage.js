@@ -84,7 +84,7 @@ function MyPage() {
             5: "cleaner.png",
         };
 
-        return `/img/${imageNames[imageNumber] || "default.png"}`; // 기본값 설정
+        return `/img/${imageNames[imageNumber] || "/img/default.png"}`; // 기본값 설정
     };
 
     // 왼쪽 박스 수정 클릭 시

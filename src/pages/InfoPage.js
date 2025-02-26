@@ -37,18 +37,11 @@ function InfoPage() {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // mainAnimal 값을 숫자로 변환
         if (name === "mainAnimal") {
-            // "올빼미"는 2, "종달새"는 1
+            // "부엉이"는 2, "종달새"는 1
             setFormData((prev) => ({
                 ...prev,
-                [name]: value === "올빼미" ? 2 : value === "종달새" ? 1 : "",
-            }));
-        } else if (name === "imgUrl") {
-            // imgUrl은 숫자로 변환 (이미지 선택 번호)
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value, // 1, 2, 3, 4, 5로 설정
+                [name]: value === "부엉이" ? 2 : value === "종달새" ? 1 : "",
             }));
         } else {
             // 나머지 값은 그대로 설정
@@ -142,6 +135,33 @@ function InfoPage() {
                         <div className="radio-group">
                             <label><input type="radio" name="gender" value="남" checked={formData.gender === "남"} onChange={handleChange} required /> 남</label>
                             <label><input type="radio" name="gender" value="여" checked={formData.gender === "여"} onChange={handleChange} required /> 여</label>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label>주요 동물:</label>
+                        <div className="radio-group">
+                            <label>
+                            <input
+                                type="radio"
+                                name="mainAnimal"
+                                value="부엉이"
+                                checked={formData.mainAnimal === 2}
+                                onChange={handleChange}
+                                required
+                            />
+                                부엉이
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="mainAnimal"
+                                    value="종달새"
+                                    checked={formData.mainAnimal === 1}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                종달새
+                            </label>
                         </div>
                     </div>
                     <div className="form-group">

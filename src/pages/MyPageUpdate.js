@@ -20,10 +20,17 @@ function MypageUpdate() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+
+        if (name === "mainAnimal") {
+            // "부엉이"는 2, "종달새"는 1
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value === "부엉이" ? 2 : value === "종달새" ? 1 : "",
+            }));
+        } else {
+            // 나머지 값은 그대로 설정
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -115,6 +122,33 @@ function MypageUpdate() {
                         <div className="radio-group">
                             <label><input type="radio" name="gender" value="남" checked={formData.gender === "남"} onChange={handleChange} required /> 남</label>
                             <label><input type="radio" name="gender" value="여" checked={formData.gender === "여"} onChange={handleChange} required /> 여</label>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label>주요 동물:</label>
+                        <div className="radio-group">
+                            <label>
+                            <input
+                                type="radio"
+                                name="mainAnimal"
+                                value="부엉이"
+                                checked={formData.mainAnimal === 2}
+                                onChange={handleChange}
+                                required
+                            />
+                                부엉이
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="mainAnimal"
+                                    value="종달새"
+                                    checked={formData.mainAnimal === 1}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                종달새
+                            </label>
                         </div>
                     </div>
                     <div className="form-group">

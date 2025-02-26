@@ -11,9 +11,12 @@ import "../css/main.css";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function MainPage() {
+    const [user, setUser] = useState(null); // 사용자 정보
     const [statistics, setStatistics] = useState(null); // 통계 데이터를 저장할 상태
     const [localRank, setLocalRank] = useState(null); // 지역 순위를 저장할 상태
     const [characterRank, setCharacterRank] = useState(null); // 특성 순위를 저장할 상태
+    // const [recommendedFriends, setRecommendedFriends] = useState([]);  // 추천 친구 정보
+    // const [randomFriends, setRandomFriends] = useState([]);  // 랜덤 친구 정보
     const [error, setError] = useState(null); // 오류 상태
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("accessToken")); // 로그인 여부 확인
 
@@ -21,11 +24,11 @@ function MainPage() {
     const defaultCharacterRank = useMemo(() => ["잠귀가 밝아요", "방 안에서 먹어요", "알람이 필수에요", "아침부터 움직여요", "잘 안 나가요"], []);
 
     // API 호출 및 데이터 가져오기 함수
-    const fetchData = async (url, setter) => {
+    const fetchData = async (url, setter, authHeader = null) => {
         try {
             const response = await fetch(url, {
                 method: "GET",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json" , ...authHeader},
             });
 
             if (response.status === 500) {
@@ -58,6 +61,16 @@ function MainPage() {
             setIsLoggedIn(false);
         } else {
             setIsLoggedIn(true);
+
+            const authHeader = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+
+            fetchData(`${process.env.REACT_APP_API_URL}/api/user/`, (data) => {
+                if (data && data.user) {
+                    setUser(data.user);
+                }
+            }, authHeader);
             // API 호출
             fetchData(`${process.env.REACT_APP_API_URL}/api/main/statistics`, (data) => {
                 if (data) {
@@ -131,6 +144,40 @@ function MainPage() {
         ],
     };
 
+    // 프로필 이미지 URL을 번호에 맞게 설정
+    const getProfileImage = (imageNumber) => {
+        const imageNames = {
+            1: "book.png",
+            2: "laptop.png",
+            3: "bed.png",
+            4: "wardrobe.png",
+            5: "cleaner.png",
+        };
+
+        return `/img/${imageNames[imageNumber] || "/img/default.png"}`; // 기본값 설정
+    };
+
+    // 동물의 이름을 mainAnimal 값에 따라 결정
+    const getAnimalName = (mainAnimal) => {
+        switch (mainAnimal) {
+            case 1:
+                return "종달새";
+            case 2:
+                return "올빼미";
+            default:
+                return "알 수 없음";
+        }
+    };
+
+    const formatBirthDate = (birthDate) => {
+        if (!birthDate) return null;
+
+        const [year, month] = birthDate.split("-");
+        const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+
+        return `${year}년 ${monthNames[parseInt(month, 10) - 1]}`;
+    };
+
     return (
         <div>
             <Header />
@@ -142,15 +189,30 @@ function MainPage() {
                 <br />
                 <div className="main-content">
                 {isLoggedIn ? (
-                        <div className="profile-section">
-                            <div className="profile-image">
-                                <img src="/img/ball.jpg" alt="기본 사진"/>
-                            </div>
-                            <div className="details-box">
-                                <h2>세부내용</h2>
-                                <p>사용자 세부 내용...</p>
-                            </div>
+                    <div className="profile-section">
+                        {user ? (
+                            <img
+                                src={getProfileImage(user.imgUrl)}
+                                alt="프로필"
+                                className="profile-image"
+                            />
+                        ) : (
+                            <img src = "/img/ball.jpg" alt="임시 프로필" />
+                        )}
+                        <div className="details-box">
+                            {user ? (
+                                <>
+                                    <p><strong>이름 : </strong> {user.nickname}</p>
+                                    <p><strong>메인 동물 : </strong> {getAnimalName(user.mainAnimal)}</p>
+                                    <p><strong>생년월 : </strong> {formatBirthDate(user.birthDate)}</p>
+                                    <p><strong>지역 : </strong> {user.local}</p>
+                                </>
+                                ) : (
+                                    <p>사용자 정보를 불러오는 중...</p>
+                                )
+                            }
                         </div>
+                    </div>
                     ) : (
                         <div className="notLogin-section">
                             <img src="/img/logo.png" alt="사이트 로고" className="logo-image"/>
