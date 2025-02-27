@@ -10,6 +10,7 @@ function Header() {
         <header className="header">
             <nav className="nav">
                 <Link to="/" className="home-link">Home </Link>
+                <Link to="/notice" className="notice-link">Notice </Link>
                 <div className="auth-links">
                 {!accessToken ? (  // access token이 없으면 로그인 링크만 표시
                     <Link to="/login" className="auth-link"> Login </Link>

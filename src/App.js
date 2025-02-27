@@ -6,10 +6,11 @@ import InfoPage from "./pages/InfoPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import OAuthCallbackPage from "./pages/OAuthCallbackPage";
 import MyPage from "./pages/MyPage"
-import ErrorPage from "./pages/ErrorPage";
+import ErrorPage from "./error/ErrorPage";
 import MyPageUpdate from "./pages/MyPageUpdate";
 import UserCharacter from "./pages/UserCharacterPage";
 import MyOtherUpdate from "./pages/MyOtherUpdate";
+import NoticePage from "./pages/NoticePage";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/" element={<MainPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/oauth/callback" element={<OAuthCallbackPage/>} />
+                <Route path="/notice" element={<NoticePage />} />
                 <Route path="/error" element={<ErrorPage />} />
 
                 {/* 인증이 필요한 페이지는 ProtectedRoute로 보호 */}

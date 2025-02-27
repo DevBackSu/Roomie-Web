@@ -32,9 +32,11 @@ function MyPage() {
 
                 if (!response.ok) {
                     if (response.status === 404) {
-                        throw new Error("존재하지 않는 사용자입니다.");
+                        alert("존재하지 않는 사용자입니다.");
+                        navigate("/error");
                     } else {
-                        throw new Error("데이터를 불러오는 데 실패했습니다.");
+                        alert("데이터를 불러오는 데 실패했습니다.");
+                        navigate("/main");
                     }
                 }
 

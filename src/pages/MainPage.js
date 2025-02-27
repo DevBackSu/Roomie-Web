@@ -197,7 +197,7 @@ function MainPage() {
                                 className="profile-image"
                             />
                         ) : (
-                            <img src = "/img/ball.jpg" alt="임시 프로필" />
+                            <img src = "/img/ball.jpg" alt="임시 프로필" className="profile-image"/>
                         )}
                         <div className="details-box">
                             {user ? (
