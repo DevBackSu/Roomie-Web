@@ -1,51 +1,72 @@
 /* 기본 레이아웃 */
 .header {
-    width: auto;
-    padding: 20px 20px 20px 20px;
+    width: 100%;
+    padding: 15px 20px;
     background-color: #d2d0d0; /* 배경색 */
 }
 
+/* 네비게이션 바 */
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
-.home-link {
-    font-size: 18px;
-    text-decoration: none;
-    color: #333;
-    margin-right: auto;  /* Home 링크를 좌측 끝에 배치 */
+/* 왼쪽 메뉴 (Home, Notice) */
+.nav-left {
+    display: flex;
+    gap: 20px;
 }
 
+/* 오른쪽 메뉴 (로그인, 마이페이지, 로그아웃) */
 .auth-links {
     display: flex;
     align-items: center;
+    gap: 20px;
+    flex-shrink: 0; /* 크기 줄어드는 것 방지 */
 }
 
+/* 로그인/마이페이지/로그아웃 버튼 그룹 */
 .user-links {
     display: flex;
     align-items: center;
-    gap: 20px;  /* MyPage와 Logout 사이에 간격을 추가 */
+    gap: 20px;
+    flex-shrink: 0;
+    min-width: 180px; /* 최소 크기 설정하여 잘리는 문제 해결 */
 }
 
+.user-links-no {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+    min-width: 90px; /* 최소 크기 설정하여 잘리는 문제 해결 */
+}
+
+/* 모든 링크 스타일 */
 .auth-link {
-    font-size: 16px;
-    text-decoration: none;
-    color: #007bff;
+    font-size: 18px;
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 기본 색상 유지 */
+    white-space: nowrap; /* 줄바꿈 방지 */
 }
 
 .auth-link:hover {
-    color: #0056b3;
+    text-decoration: none; /* 호버 시에도 밑줄 제거 */
+    color: inherit; /* 호버 시에도 색상 변경 방지 */
 }
 
+/* 버튼 스타일 */
 button.auth-link {
     background: none;
     border: none;
-    color: #007bff;
     cursor: pointer;
+    font-size: 18px;
+    padding: 5px 10px;
+    white-space: nowrap; /* 버튼 텍스트 줄바꿈 방지 */
 }
 
 button.auth-link:hover {
-    color: #0056b3;
+    color: inherit;
 }

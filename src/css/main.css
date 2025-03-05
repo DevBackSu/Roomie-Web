@@ -98,3 +98,21 @@ li {
     list-style-type: disc;
     margin-bottom: 10px;
 }
+
+.notLogin-section {
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    gap: 30px; /* 로고와 텍스트 사이 간격 */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.logo-image {
+    width: 500px; /* 로고 크기 조절 */
+    height: auto; /* 비율 유지 */
+}
+
+.notLogin-section p {
+    font-size: 18px; /* 텍스트 크기 */
+    color: #333; /* 글자색 */
+}

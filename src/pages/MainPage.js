@@ -182,11 +182,6 @@ function MainPage() {
         <div>
             <Header />
             <div className="page-wrapper">
-                <h1>Welcome to the Main Page</h1>
-                <Link to="/login">Login</Link>
-                <br />
-                <button onClick={logout}>Logout</button>
-                <br />
                 <div className="main-content">
                 {isLoggedIn ? (
                     <div className="profile-section">
@@ -216,7 +211,11 @@ function MainPage() {
                     ) : (
                         <div className="notLogin-section">
                             <img src="/img/logo.png" alt="사이트 로고" className="logo-image"/>
-                            <p>해당 사이트는 사용자 맞춤 분석 및 추천 기능을 제공합니다.</p>
+                            <div>
+                                <p>해당 사이트는 사용자 맞춤 분석 및 추천 기능을 제공합니다.</p>
+                                <Link to="/login">Login</Link>
+                                <button onClick={logout}>Logout</button>
+                            </div>
                         </div>
                     )}
 
