@@ -91,11 +91,12 @@
 
 /* 리스트 스타일 */
 ul {
+    list-style-type : decimal;
     padding-left: 20px;
 }
 
 li {
-    list-style-type: disc;
+    /* list-style-type: disc; */
     margin-bottom: 10px;
 }
 

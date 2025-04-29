@@ -13,7 +13,7 @@
     width: 100%;
 }
 
-/* 왼쪽 메뉴 (Home, Notice) */
+/* 왼쪽 메뉴 (Home, Post) */
 .nav-left {
     display: flex;
     gap: 20px;

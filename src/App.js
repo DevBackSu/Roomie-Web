@@ -10,7 +10,7 @@ import ErrorPage from "./error/ErrorPage";
 import MyPageUpdate from "./pages/MyPageUpdate";
 import UserCharacter from "./pages/UserCharacterPage";
 import MyOtherUpdate from "./pages/MyOtherUpdate";
-import NoticePage from "./pages/NoticePage";
+import PostPage from "./pages/PostPage";
 
 function App() {
     return (
@@ -20,7 +20,7 @@ function App() {
                 <Route path="/" element={<MainPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/oauth/callback" element={<OAuthCallbackPage/>} />
-                <Route path="/notice" element={<NoticePage />} />
+                <Route path="/post" element={<PostPage />} />
                 <Route path="/error" element={<ErrorPage />} />
 
                 {/* 인증이 필요한 페이지는 ProtectedRoute로 보호 */}

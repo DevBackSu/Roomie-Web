@@ -9,10 +9,10 @@ function Header() {
     return (
         <header className="header">
             <nav className="nav">
-                {/* 왼쪽 메뉴 (Home, Notice) */}
+                {/* 왼쪽 메뉴 (Home, Post) */}
                 <div className="nav-left">
                     <Link to="/" className="auth-link">Home</Link>
-                    <Link to="/notice" className="auth-link">Notice</Link>
+                    <Link to="/post" className="auth-link">Post</Link>
                 </div>
 
                 {/* 오른쪽 메뉴 (Login / MyPage, Logout) */}

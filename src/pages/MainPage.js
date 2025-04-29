@@ -238,7 +238,7 @@ function MainPage() {
                             {characterRank && characterRank.length > 0 ? (
                                 <ul>
                                     {characterRank.map((item, index) => (
-                                        <li key={index}>{index + 1}. {item}</li>
+                                        <li key={index}> {item}</li>
                                     ))}
                                 </ul>
                             ) : (
