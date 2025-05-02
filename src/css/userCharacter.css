@@ -46,6 +46,12 @@
     margin-bottom: 10px;
 }
 
+.info-warning {
+    font-size: 14px;
+    color : #b22222;
+    margin-bottom: 10px;
+}
+
 .character-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2열 레이아웃 */

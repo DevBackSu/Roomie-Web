@@ -139,6 +139,9 @@ function InfoPage() {
                     </div>
                     <div className="form-group">
                         <label>주요 동물:</label>
+                        <div className="animal-info">
+                            새벽에 활동하는 사람은 부엉이를, 아침에 활동하는 사람은 종달새를 선택해주세요.
+                        </div>
                         <div className="radio-group">
                             <label>
                             <input

@@ -34,6 +34,12 @@
     gap: 10px;
 }
 
+.animal-info {
+    font-size: 15px;
+    color : #b22222;
+    margin-bottom: 10px;
+}
+
 .radio-group {
     display: flex;
     gap: 20px;
