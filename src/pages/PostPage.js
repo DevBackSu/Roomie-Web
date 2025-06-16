@@ -40,8 +40,8 @@ function PostPage() {
         fetchPosts();
     }, [page, size]);
 
-    const handlePostClick = (postId) => {
-        navigate(`/post/${postId}`);
+    const handlePostClick = (postCheckId) => {
+        navigate(`/post/${postCheckId}`);
     };
 
     const handlePageClick = (pageNum) => {
