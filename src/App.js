@@ -11,6 +11,7 @@ import MyPageUpdate from "./pages/MyPageUpdate";
 import UserCharacter from "./pages/UserCharacterPage";
 import MyOtherUpdate from "./pages/MyOtherUpdate";
 import PostPage from "./pages/PostPage";
+import PostDetail from './pages/PostDetail';
 
 function App() {
     return (
@@ -55,6 +56,12 @@ function App() {
                         <MyOtherUpdate />
                     </ProtectedRoute>
                 } />
+
+                <Route path="/post/:id" element={
+                    <ProtectedRoute>
+                        <PostDetail />
+                    </ProtectedRoute>
+                }/>
 
                 {/* 잘못된 URL은 메인 페이지로 리다이렉트 */}
                 <Route path="*" element={<Navigate to="/" />} />
