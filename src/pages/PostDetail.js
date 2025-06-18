@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './PostDetail.css'; // 스타일 분리 시 사용
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import '../css/PostDetail.css'; // 스타일 분리 시 사용
 
 function PostDetail() {
     const { id } = useParams(); // postCheckId
@@ -12,13 +14,14 @@ function PostDetail() {
         const fetchPostDetail = async () => {
             try {
                 const token = localStorage.getItem('accessToken');
-                const response = await axios.get(`/api/post/detail/${id}`, {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/posting/detail/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
                 if (response.data.success) {
-                    setPost(response.data.data);
+                    console.log("데이터 : ", response.data.postDetail)
+                    setPost(response.data.postDetail);
                 } else {
                     setError(response.data.message || 'Failed to load post');
                 }
@@ -40,15 +43,19 @@ function PostDetail() {
     }
 
     return (
-        <div className="post-detail-container">
-            <h2 className="post-detail-title">{post.title}</h2>
-            <div className="post-detail-meta">
-                <span>작성자: {post.writerName}</span>
-                <span>작성일: {post.writeDtm}</span>
+        <div>
+            <Header/>
+            <div className="post-detail-container">
+                <h2 className="post-detail-title">{post.title}</h2>
+                <div className="post-detail-meta">
+                    <span>작성자: {post.writerName}</span>
+                    <span>작성일: {post.writeDtm}</span>
+                </div>
+                <div className="post-detail-content">
+                    {post.content}
+                </div>
             </div>
-            <div className="post-detail-content">
-                {post.content}
-            </div>
+            <Footer/>
         </div>
     );
 }

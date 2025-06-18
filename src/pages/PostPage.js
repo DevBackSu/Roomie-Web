@@ -82,7 +82,7 @@ function PostPage() {
                 <div className="post-summary">총 게시글 수: {totalPosts}</div>
                 <ul className="post-list">
                     {posts.map((post) => (
-                        <li key={post.postId} className="post-item" onClick={() => handlePostClick(post.postId)}>
+                        <li key={post.postCheckId} className="post-item" onClick={() => handlePostClick(post.postCheckId)}>
                             <h2 className="post-item-title">{post.title}</h2>
                             <p className="post-item-content">{post.content.substring(0, 100)}...</p>
                             <div className="post-meta">
