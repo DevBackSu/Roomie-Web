@@ -98,3 +98,18 @@
     font-weight: bold;
     border: 2px solid #311b92;
 }
+
+/* 게시글 등록 버튼 */
+.post-create-btn {
+    margin-bottom: 1rem;
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #7e57c2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.post-create-btn:hover {
+    background-color: #5e35b1;
+}

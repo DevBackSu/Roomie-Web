@@ -79,6 +79,9 @@ function PostPage() {
             <Header />
             <div className="post-container">
                 <h1 className="post-title">게시판</h1>
+                <button className="post-create-btn" onClick={() => navigate("/post/create")}>
+                    게시글 등록
+                </button>
                 <div className="post-summary">총 게시글 수: {totalPosts}</div>
                 <ul className="post-list">
                     {posts.map((post) => (

@@ -12,6 +12,7 @@ import UserCharacter from "./pages/UserCharacterPage";
 import MyOtherUpdate from "./pages/MyOtherUpdate";
 import PostPage from "./pages/PostPage";
 import PostDetail from './pages/PostDetail';
+import PostWrite from './pages/PostWrite';
 
 function App() {
     return (
@@ -60,6 +61,12 @@ function App() {
                 <Route path="/post/:id" element={
                     <ProtectedRoute>
                         <PostDetail />
+                    </ProtectedRoute>
+                }/>
+
+                <Route path="/post/create" element={
+                    <ProtectedRoute>
+                        <PostWrite />
                     </ProtectedRoute>
                 }/>
 
