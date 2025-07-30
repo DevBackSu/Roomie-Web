@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import '../css/PostDetail.css'; // 스타일 분리 시 사용
+import '../css/PostDetail.css';
 
 function PostDetail() {
     const { id } = useParams(); // postCheckId
@@ -20,7 +20,6 @@ function PostDetail() {
                     }
                 });
                 if (response.data.success) {
-                    console.log("데이터 : ", response.data.postDetail)
                     setPost(response.data.postDetail);
                 } else {
                     setError(response.data.message || 'Failed to load post');
@@ -34,28 +33,40 @@ function PostDetail() {
         fetchPostDetail();
     }, [id]);
 
-    if (error) {
-        return <div className="post-detail-error">{error}</div>;
-    }
-
-    if (!post) {
-        return <div className="post-detail-loading">로딩 중...</div>;
-    }
+    if (error) return <div className="post-detail-error">{error}</div>;
+    if (!post) return <div className="post-detail-loading">로딩 중...</div>;
 
     return (
         <div>
-            <Header/>
+            <Header />
             <div className="post-detail-container">
                 <h2 className="post-detail-title">{post.title}</h2>
                 <div className="post-detail-meta">
                     <span>작성자: {post.writerName}</span>
                     <span>작성일: {post.writeDtm}</span>
                 </div>
+
                 <div className="post-detail-content">
                     {post.content}
                 </div>
+
+                {/* 🗂 첨부파일 섹션 (조건부 렌더링) */}
+                {post.files?.length > 0 && (
+                    <div className="post-detail-files">
+                        <h4>📎 첨부파일</h4>
+                        <ul>
+                            {post.files.map((file, index) => (
+                                <li key={index}>
+                                    <a href={file.filePath} target="_blank" rel="noopener noreferrer">
+                                        {file.originName || file.fileName}
+                                    </a> <span className="post-file-type">({file.fileType})</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

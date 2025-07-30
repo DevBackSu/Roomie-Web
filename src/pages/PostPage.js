@@ -24,7 +24,7 @@ function PostPage() {
                     throw new Error("게시글을 불러오는 데 실패했습니다.");
                 }
                 const data = await response.json();
-                if (data.success === "true") {
+                if (data.success === true) {
                     setPost(data.postData.postList);
                     setTotalPosts(data.postData.totalPosts); // 전체 게시글 수 저장
                 } else {

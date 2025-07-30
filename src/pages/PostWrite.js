@@ -8,10 +8,40 @@ function PostCreatePage() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [files, setFiles] = useState([]);
+    const [fileNames, setFileNames] = useState([]);
     const navigate = useNavigate();
+    const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
     const handleFileChange = (e) => {
-        setFiles([...e.target.files]);
+        const selectedFiles = Array.from(e.target.files);
+        const validFiles = [];
+        const validNames = [];
+        const excludedNames = [];
+
+        selectedFiles.forEach(file => {
+            if (file.size <= MAX_FILE_SIZE) {
+                validFiles.push(file);
+                validNames.push(file.name);
+            } else {
+                excludedNames.push(file.name);
+            }
+        });
+
+        if (excludedNames.length > 0) {
+            alert(`❌ 다음 파일은 1MB 초과로 제외됨: ${excludedNames.join(", ")}`);
+        }
+
+        setFiles(prev => [...prev, ...validFiles]);
+        setFileNames(prev => [...prev, ...validNames]);
+    };
+
+    const handleRemoveFile = (index) => {
+        const updatedFiles = [...files];
+        const updatedNames = [...fileNames];
+        updatedFiles.splice(index, 1);
+        updatedNames.splice(index, 1);
+        setFiles(updatedFiles);
+        setFileNames(updatedNames);
     };
 
     const handleSubmit = async (e) => {
@@ -37,14 +67,13 @@ function PostCreatePage() {
             const result = await response.json();
 
             if (result.success === "true" || result.success === true) {
-                alert("게시글이 등록되었습니다!");
-                const postCheckId = result.postCheckId;
-                navigate(`/post/${postCheckId}`);
+                alert("✅ 게시글이 등록되었습니다!");
+                navigate(`/post/${result.postCheckId}`);
             } else {
-                alert("게시글 등록에 실패했습니다: " + result.error);
+                alert("등록 실패: " + result.error);
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error(error);
             alert("서버 오류가 발생했습니다.");
         }
     };
@@ -70,8 +99,28 @@ function PostCreatePage() {
                         required
                     />
 
-                    <label>파일 첨부</label>
+                    <label>파일 첨부 (1MB 이하만 등록)</label>
                     <input type="file" multiple onChange={handleFileChange} />
+
+                    {fileNames.length > 0 && (
+                        <div className="file-preview-box">
+                            <strong>🗂️ 업로드 파일 목록:</strong>
+                            <ul>
+                                {fileNames.map((name, idx) => (
+                                    <li key={idx}>
+                                        {name}{" "}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveFile(idx)}
+                                            className="remove-btn"
+                                        >
+                                            ❌ 삭제
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
                     <button type="submit">등록하기</button>
                 </form>
