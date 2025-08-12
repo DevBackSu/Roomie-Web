@@ -37,6 +37,7 @@
     background-color: #ede7f6;
     border-radius: 8px;
     margin-bottom: 30px;
+    min-height: 200px;
 }
 
 /* 로딩 / 에러 */
@@ -84,3 +85,45 @@
     color: #7b1fa2;
     margin-left: 8px;
 }
+
+/* 첨부파일 제목 이모티콘 크기 조절 */
+.post-files-heading {
+    font-size: 15px;
+    font-weight: 600;
+    color: #6a1b9a;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.post-files-heading::before {
+    content: "📎";
+    font-size: 15px; /* 이모지 크기를 글자와 맞춤 */
+    margin-right: 6px;
+}
+
+/* 하단 버튼 영역 */
+.post-detail-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end; /* ✅ 중앙 → 오른쪽 정렬 */
+    gap: 16px;
+}
+
+/* 개별 버튼 스타일 */
+.post-action-button {
+    padding: 10px 18px;
+    background-color: #ce93d8;
+    color: #4a148c;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.post-action-button:hover {
+    background-color: #ba68c8;
+}
+

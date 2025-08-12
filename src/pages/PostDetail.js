@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate  } from 'react-router-dom';
 import axios from 'axios';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -7,6 +7,7 @@ import '../css/PostDetail.css';
 
 function PostDetail() {
     const { id } = useParams(); // postCheckId
+    const navigate = useNavigate();
     const [post, setPost] = useState(null);
     const [error, setError] = useState(null);
 
@@ -43,7 +44,7 @@ function PostDetail() {
                 <h2 className="post-detail-title">{post.title}</h2>
                 <div className="post-detail-meta">
                     <span>작성자: {post.writerName}</span>
-                    <span>작성일: {post.writeDtm}</span>
+                    <span>작성일: {post.writeDtm?.slice(0, 10)}</span>
                 </div>
 
                 <div className="post-detail-content">
@@ -65,6 +66,11 @@ function PostDetail() {
                         </ul>
                     </div>
                 )}
+                <div className="post-detail-actions">
+                    <button className="post-action-button" onClick={() => navigate('/post')}>목록</button>
+                    <button className="post-action-button">수정</button>
+                    <button className="post-action-button">삭제</button>
+                </div>
             </div>
             <Footer />
         </div>
